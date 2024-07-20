@@ -16,14 +16,14 @@ function hardpreload(module, path)
 	love.filesystem.write(full_path, data)
 	-- preload module
 	package.preload[module] = package.loadlib(love.filesystem.getSaveDirectory() .. "/" .. full_path, "luaopen_" .. module)
-	love.filesystem.setIdentity("mari0")
+	love.filesystem.setIdentity("mari0_aces")
 end
 
 function softpreload(module, path)
 	love.filesystem.setIdentity("mari0_libs")
     local full_path = module .. "/" .. path
     package.preload[module] = package.loadlib(love.filesystem.getSaveDirectory() .. "/" .. full_path, "luaopen_" .. module)
-    love.filesystem.setIdentity("mari0")
+    love.filesystem.setIdentity("mari0_aces")
 end
 
 local function loadhttps(loadfunc)

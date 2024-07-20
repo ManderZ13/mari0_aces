@@ -19,14 +19,14 @@ end
 ---@param filename string The filename of the mappack.
 ---@return boolean success Whether the mappack was mounted successfully.
 function mountmappack(filename)
-    return mountto("alesans_entities/onlinemappacks/" .. filename, mappackfolder)
+    return mountto("onlinemappacks/" .. filename, mappackfolder)
 end
 
 --- Mounts a character from the online repository.
 ---@param filename string The filename of the character.
 ---@return boolean success Whether the character was mounted successfully.
 function mountcharacter(filename)
-    return mountto("alesans_entities/characters/" .. filename, "alesans_entities/characters")
+    return mountto("characters/" .. filename, "characters")
 end
 
 --- Mounts an asset from the online repository.
@@ -61,8 +61,8 @@ end
 
 --- Mounts all downloaded assets from the online repository.
 function mountalldlc()
-    mountallfrom("alesans_entities/onlinemappacks", mappackfolder, mountmappack)
-    mountallfrom("alesans_entities/characters", "alesans_entities/characters", mountcharacter)
+    mountallfrom("onlinemappacks", mappackfolder, mountmappack)
+    mountallfrom("characters", "characters", mountcharacter)
 end
 
 --- Download the asset list from the online repository.
@@ -92,9 +92,9 @@ function downloadasset(asset)
     end
     local filename = asset.download.filename
     if asset.type == "mappack" then
-        filename = "alesans_entities/onlinemappacks/" .. filename
+        filename = "onlinemappacks/" .. filename
     elseif asset.type == "character" then
-        filename = "alesans_entities/characters/" .. filename
+        filename = "characters/" .. filename
     end
     love.filesystem.write(filename, body)
     return true

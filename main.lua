@@ -105,7 +105,6 @@ function love.load()
 	loadingbarv = 0
 
 	marioversion = 1006
-	versionstring = "version 1.6"
 	shaderlist = love.filesystem.getDirectoryItems( "shaders/" )
 	dlclist = {"dlc_a_portal_tribute", "dlc_acid_trip", "dlc_escape_the_lab", "dlc_scienceandstuff", "dlc_smb2J", "dlc_the_untitled_game"}
 	
@@ -133,11 +132,7 @@ function love.load()
 	currentshaderi1 = 1
 	currentshaderi2 = 1
 	
-	if android and not androidtest then
-		love.filesystem.setIdentity("mari0_android") --[DROID]
-	else
-		love.filesystem.setIdentity("mari0")
-	end
+	love.filesystem.setIdentity("mari0_aces")
 	
 	local ok, result = pcall(loadconfig)
 	if not ok then
@@ -161,7 +156,7 @@ function love.load()
 		changescale(scale, fullscreen)
 	end
 
-	love.window.setTitle( "Mari0: AE" )
+	love.window.setTitle( "Mari0: ACES" )
 	
 	love.window.setIcon(love.image.newImageData("graphics/icon.png"))
 	
@@ -244,7 +239,7 @@ function love.load()
 	fontindexOLD["D"] = "↓"
 	fontindexOLD["U"] = "↑"
 
-	if love.filesystem.getInfo("alesans_entities/familyfriendly.txt") then FamilyFriendly = true end
+	if love.filesystem.getInfo("familyfriendly.txt") then FamilyFriendly = true end
 	
 	math.randomseed(os.time());math.random();math.random()
 	
@@ -325,21 +320,18 @@ function love.load()
 		soundenabled = true
 	end
 	love.filesystem.createDirectory("mappacks")
-	
-	love.filesystem.createDirectory("alesans_entities")
-	love.filesystem.createDirectory("alesans_entities/mappacks")
-	love.filesystem.createDirectory("alesans_entities/onlinemappacks")
-	love.filesystem.createDirectory("alesans_entities/characters")
-	love.filesystem.createDirectory("alesans_entities/hats")
+	love.filesystem.createDirectory("onlinemappacks")
+	love.filesystem.createDirectory("characters")
+	love.filesystem.createDirectory("hats")
 	
 	--[[copy included zip dlcs to save folder (because of course you can't mount from source directory :/)
-	local zips = love.filesystem.getDirectoryItems("alesans_entities/dlc_mappacks")
+	local zips = love.filesystem.getDirectoryItems("dlc_mappacks")
 	if #zips > 0 then
 		for j, w in pairs(zips) do
-			if not love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. w) then
-				local filedata = love.filesystem.newFileData("alesans_entities/dlc_mappacks/" .. w)
-				love.filesystem.write("alesans_entities/onlinemappacks/" .. w, filedata)
-				if j == 1 and not love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. w) then
+			if not love.filesystem.getInfo("onlinemappacks/" .. w) then
+				local filedata = love.filesystem.newFileData("dlc_mappacks/" .. w)
+				love.filesystem.write("onlinemappacks/" .. w, filedata)
+				if j == 1 and not love.filesystem.getInfo("onlinemappacks/" .. w) then
 					break
 				end
 			end
@@ -363,8 +355,8 @@ function love.load()
 	datet = {os.date("%m"),os.date("%d"),os.date("%Y")}
 	DChigh = {"-", "-", "-"}
 	DChightemp = false
-	if love.filesystem.getInfo("alesans_entities/dc.txt") then
-		local s = love.filesystem.read("alesans_entities/dc.txt")
+	if love.filesystem.getInfo("dc.txt") then
+		local s = love.filesystem.read("dc.txt")
 		local s2 = s:split("~")
 		DCcompleted = tonumber(s2[1])
 		if s2[2] == datet[1] .. "/" .. datet[2] .. "/" .. datet[3] then
@@ -597,10 +589,9 @@ function love.load()
 			"download dlc mappacks by going to the dlc tab in the mappack menu!",
 			"is there a problem with the mod? tell me at the stabyourself.net forums!",
 			"there are currently about " .. math.floor(entitiescount-100) .. " new entities in this mod! try them out!",
-			--"change your mappack folder to 'alesans_entities/mappacks' in the options to prevent crashes when you use unmodded mari0!",
 			"lock your mouse with f12!",
 			"display fps with f11!",
-			"experienced an error? post your error found in 'mari0/alesans_entities/crashes' at the stabyourself.net forums!",
+			"experienced an error? post your error found in 'mari0_aces/crashes' at the stabyourself.net forums!",
 			"you can access the mari0 folder easily by pressing 'm' in the mappack selection menu!",
 			"try out the dlc mappacks!",
 			"try out today's daily challenge by going to the mappack selection menu and going to the 'daily challenge' tab!",
@@ -609,7 +600,7 @@ function love.load()
 			"play with friends online! press the left key to start!",
 			"enter fullscreen with alt and enter.",
 			"change your character in the settings!",
-			"add more playable characters in the 'mari0/alesans_entities/characters' folder."}
+			"add more playable characters in the 'mari0_aces/characters' folder."}
 	disabletips = false
 
 	loadingbardraw(1)
@@ -1312,10 +1303,6 @@ function saveconfig()
 	s = s .. "volume:" .. volume .. ";"
 	s = s .. "mouseowner:" .. mouseowner .. ";"
 	
-	if mappackfolder == "alesans_entities/mappacks" then
-		s = s .. "modmappacks;"
-	end
-	
 	s = s .. "mappack:" .. mappack .. ";"
 	
 	if vsync then
@@ -1359,7 +1346,7 @@ function saveconfig()
 	if localnick then
 		s = s .. "localnick:" .. localnick .. ";"
 	end
-	love.filesystem.write("alesans_entities/options.txt", s)
+	love.filesystem.write("options.txt", s)
 end
 
 function loadconfig(nodefaultconfig)
@@ -1369,9 +1356,7 @@ function loadconfig(nodefaultconfig)
 	end
 	
 	local s
-	if love.filesystem.getInfo("alesans_entities/options.txt") then
-		s = love.filesystem.read("alesans_entities/options.txt")
-	elseif love.filesystem.getInfo("options.txt") then
+	if love.filesystem.getInfo("options.txt") then
 		s = love.filesystem.read("options.txt")
 	else
 		return
@@ -1484,8 +1469,6 @@ function loadconfig(nodefaultconfig)
 					reachedworlds[s2[2]][i] = false
 				end
 			end
-		elseif s2[1] == "modmappacks" then
-			mappackfolder = "alesans_entities/mappacks"
 		elseif s2[1] == "resizable" then
 			if s2[2] then
 				resizable = (s2[2] == "true")
@@ -2488,9 +2471,9 @@ function openSaveFolder(subfolder) --By Slime
 	elseif os.getenv("WINDIR") then -- lolwindows
 		--cmdstr = "Explorer /root,%s"
 		if path:match("LOVE") then --hardcoded to fix ISO characters in usernames and made sure release mode doesn't mess anything up -saso
-			cmdstr = "Explorer %%appdata%%\\LOVE\\mari0"
+			cmdstr = "Explorer %%appdata%%\\LOVE\\mari0_aces"
 		else
-			cmdstr = "Explorer %%appdata%%\\mari0"
+			cmdstr = "Explorer %%appdata%%\\mari0_aces"
 		end
 		path = path:gsub("/", "\\")
 		successval = 1
@@ -2775,16 +2758,16 @@ function love.errorhandler(msg)
 
     p2 = string.gsub(p2, "\t", "")
 	p2 = string.gsub(p2, "%[string \"(.-)\"%]", "%1")
-	p2 = p2 .. "\n\nCrash saved in\nalesans_entities\\crashes"
+	p2 = p2 .. "\n\nCrash saved in\nmari0_aces\\crashes"
 	
 	if love.filesystem and love.filesystem.createDirectory and love.filesystem.write and love.filesystem.getDirectoryItems and love.filesystem.remove then
-		love.filesystem.createDirectory("alesans_entities/crashes")
-		local items = love.filesystem.getDirectoryItems("alesans_entities/crashes") or {}
+		love.filesystem.createDirectory("crashes")
+		local items = love.filesystem.getDirectoryItems("crashes") or {}
 		if #items >= 10 then
 			for i = 1, #items do
-				love.filesystem.remove("alesans_entities/crashes/" .. items[i])
+				love.filesystem.remove("crashes/" .. items[i])
 			end
-			items = love.filesystem.getDirectoryItems("alesans_entities/crashes")
+			items = love.filesystem.getDirectoryItems("crashes")
 		end
 		local s = ""
 		for j, w in pairs(err) do
@@ -2796,7 +2779,7 @@ function love.errorhandler(msg)
 		if VERSION then
 			s = s .. "version: " .. VERSION
 		end
-		love.filesystem.write("alesans_entities/crashes/" .. #items+1 .. ".txt", s)
+		love.filesystem.write("crashes/" .. #items+1 .. ".txt", s)
 	end
 	
     local function draw()
@@ -2811,7 +2794,7 @@ function love.errorhandler(msg)
 		end
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.printf({{1,1,1,1},p,{1,1,1,100/255},p2}, 10, 10, (love.graphics.getWidth() - 10)/fontscale, nil, 0, fontscale, fontscale)
-		love.graphics.print("Mari0 AE Version " .. VERSIONSTRING, love.graphics.getWidth() - font:getWidth("Mari0 AE Version " .. VERSIONSTRING)*fontscale - 5*scale, love.graphics.getHeight() - 15*scale, 0, fontscale, fontscale)
+		love.graphics.print("Mari0 ACES Version " .. VERSIONSTRING, love.graphics.getWidth() - font:getWidth("Mari0 ACES Version " .. VERSIONSTRING)*fontscale - 5*scale, love.graphics.getHeight() - 15*scale, 0, fontscale, fontscale)
 		love.graphics.present()
     end
 	
@@ -2858,8 +2841,8 @@ function loadnitpicks()
 	--shit i don't want to add
 	--if people complain about stuff they can use this
 	nitpicks = false
-	if love.filesystem.getInfo("alesans_entities/nitpicks.json") then
-		local data = love.filesystem.read("alesans_entities/nitpicks.json")
+	if love.filesystem.getInfo("nitpicks.json") then
+		local data = love.filesystem.read("nitpicks.json")
 		t = JSON:decode(data or "")
 		--CASE INSENSITVE THING
 		for i, v in pairs(t) do
@@ -2905,9 +2888,9 @@ function loadnitpicks()
 		local oldfamilyfriendly = FamilyFriendly
 		FamilyFriendly = t.familyfriendly or t.ilovefamilyguy
 		if FamilyFriendly then
-			love.filesystem.write("alesans_entities/familyfriendly.txt","")
+			love.filesystem.write("familyfriendly.txt","")
 		elseif oldfamilyfriendly then
-			love.filesystem.remove("alesans_entities/familyfriendly.txt")
+			love.filesystem.remove("familyfriendly.txt")
 		end
 		if t.showfps then
 			showfps = t.showfps

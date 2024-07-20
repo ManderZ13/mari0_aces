@@ -1,6 +1,6 @@
 function love.conf(t)
-	t.author = "Maurice" --alesan99 made the mod :)
-	t.identity = "mari0"
+	t.author = "Maurice" -- Mod by KirbyKidJ, base mod by Alesan99
+	t.identity = "mari0_aces"
 	--t.console = true
 	--t.screen = false
 	t.modules.physics = false

@@ -20,7 +20,7 @@ function enemies_load()
 	local enemiesexist = love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/enemies/")
 	if (not enemiesexist) and (not editormode) then
 		for i = 1, #mariocharacter do
-			if mariocharacter[i] and love.filesystem.getInfo("alesans_entities/characters/" .. mariocharacter[i] .. "/enemies/") then
+			if mariocharacter[i] and love.filesystem.getInfo("characters/" .. mariocharacter[i] .. "/enemies/") then
 				enemiesexist = true
 				break
 			end
@@ -54,10 +54,10 @@ function enemies_load()
 	--load enemies for custom characters
 	local characterenemiesloaded = {} --don't load the same enemy multiple times
 	for i = 1, #mariocharacter do
-		if mariocharacter[i] and (not characterenemiesloaded[mariocharacter[i]]) and love.filesystem.getInfo("alesans_entities/characters/" .. mariocharacter[i] .. "/enemies/") then
-			local fl3 = love.filesystem.getDirectoryItems("alesans_entities/characters/" .. mariocharacter[i] .. "/enemies/")
+		if mariocharacter[i] and (not characterenemiesloaded[mariocharacter[i]]) and love.filesystem.getInfo("characters/" .. mariocharacter[i] .. "/enemies/") then
+			local fl3 = love.filesystem.getDirectoryItems("characters/" .. mariocharacter[i] .. "/enemies/")
 			for i2 = 1, #fl3 do
-				local cepath = "alesans_entities/characters/" .. mariocharacter[i] .. "/enemies/" .. fl3[i2]
+				local cepath = "characters/" .. mariocharacter[i] .. "/enemies/" .. fl3[i2]
 				if love.filesystem.getInfo(cepath, "directory") then
 					--load enemies from folder
 					local fl4 = love.filesystem.getDirectoryItems(cepath)

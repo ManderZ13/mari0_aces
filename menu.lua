@@ -23,7 +23,7 @@ function menu_load()
 	colorsetedit = 1
 	mappackselection = 1
 	onlinemappackselection = 1
-	openmappacksbutton = guielement:new("button", 241, 190, "", openSaveFolder, nil, 0, 2.5, 147, true)
+	openmappacksbutton = guielement:new("button", 241, 190, "", function() openSaveFolder("mappacks") end, nil, 0, 2.5, 147, true)
 	openmappacksbutton.active = false
 	opendlcbutton = guielement:new("button", 241, 190, "open dlc folder", opendlcfolder, nil, 0, 2.5, 147, true)
 	opendlcbutton.active = false
@@ -511,7 +511,7 @@ function menu_draw()
 		love.graphics.draw(titleimage, titlequad[titleframe], x*scale, 24*scale, 0, scale, scale)
 		
 		love.graphics.setColor(1, 1, 1)
-		properprintF("©2012-2023 maurice", (x+titlewidth-144)*scale, 112*scale)
+		properprintF("©2006-2024 maurice", (x+titlewidth-144)*scale, 112*scale)
 		love.graphics.setColor(1, 1, 1, 1)
 		
 		if selection == 0 then
@@ -575,14 +575,14 @@ function menu_draw()
 			
 			if i == 9 then love.graphics.setColor(1, 1, 1) end
 			
-			--if not (not disabletips and menutipoffset > -width*16) then
+			--[[if not (not disabletips and menutipoffset > -width*16) then
 				if not (custombackground or customforeground) or hudoutline then
 					love.graphics.setColor(0, 0, 0)
 					properprint("mod by alesan99", (width*16-#("mod by alesan99")*8-7)*scale, 209*scale) --a little less intrusive
 					love.graphics.setColor(1, 1, 1)
 				end
 				properprint("mod by alesan99", (width*16-#("mod by alesan99")*8-8)*scale, 208*scale) --a little less intrusive
-			--end
+			end]]
 			
 			love.graphics.translate(-tx, -ty)
 		end
@@ -1450,24 +1450,10 @@ function menu_draw()
 				properprintF(TEXT["off"], (posX-utf8.len(TEXT["off"])*8)*scale, 165*scale)
 			end
 			
-			if optionsselection == 11 then
-				love.graphics.setColor(1, 1, 1, 1)
-			else
-				love.graphics.setColor(100/255, 100/255, 100/255, 1)
-			end
-			
-			properprintF(TEXT["mappack folder:"], 30*scale, 180*scale)
-			if mappackfolder == "mappacks" then
-				properprintF("mappacks", (180-24)*scale, 180*scale)
-			else
-				properprintF("alesans_e..", (180-28)*scale, 180*scale)
-			end
-			
 			--love.graphics.setColor(100/255, 100/255, 100/255, 1)
 			--properprintF(TEXT["lock mouse with f12"], 30*scale, 195*scale)
 			
 			love.graphics.setColor(1, 1, 1, 1)
-			properprintF("alesan99's entities", 30*scale, 198*scale)
 			local version = "Version " .. VERSIONSTRING
 			properprintF(version, (234-(#(version)*8))*scale, 207*scale)
 		elseif optionstab == 4 then
@@ -1896,7 +1882,7 @@ function loadmappacks()
 	
 	local delete = {}
 	for i = 1, #mappacklist do
-		if ((not onlinedlc) and (love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. mappacklist[i] .. ".zip")
+		if ((not onlinedlc) and (love.filesystem.getInfo("onlinemappacks/" .. mappacklist[i] .. ".zip")
 		or love.filesystem.getInfo(mappackfolder .. "/" .. mappacklist[i] .. "/version.txt")))
 		or not love.filesystem.getInfo(mappackfolder .. "/" .. mappacklist[i] .. "/settings.txt") then
 			table.insert(delete, i)
@@ -2030,13 +2016,13 @@ function loadonlinemappacks()
 		love.graphics.present()
 
 		--copy included zip dlcs to save folder (because of course you can't mount from source directory :/)
-		local zips = love.filesystem.getDirectoryItems("alesans_entities/dlc_mappacks")
+		local zips = love.filesystem.getDirectoryItems("dlc_mappacks")
 		if #zips > 0 then
 			for j, w in pairs(zips) do
-				if not love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. w) then
-					local filedata = love.filesystem.newFileData("alesans_entities/dlc_mappacks/" .. w)
-					love.filesystem.write("alesans_entities/onlinemappacks/" .. w, filedata)
-					if j == 1 and not love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. w) then
+				if not love.filesystem.getInfo("onlinemappacks/" .. w) then
+					local filedata = love.filesystem.newFileData("dlc_mappacks/" .. w)
+					love.filesystem.write("onlinemappacks/" .. w, filedata)
+					if j == 1 and not love.filesystem.getInfo("onlinemappacks/" .. w) then
 						break
 					end
 				end
@@ -2050,7 +2036,7 @@ function loadonlinemappacks()
 		
 		local delete = {}
 		for i = 1, #mappacks do
-			if (not (love.filesystem.getInfo("alesans_entities/onlinemappacks/" .. mappacks[i] .. ".zip") or love.filesystem.getInfo(mappackfolder .. "/" .. mappacks[i] .. "/version.txt"))) or not love.filesystem.getInfo( mappackfolder .. "/" .. mappacks[i] .. "/settings.txt") then
+			if (not (love.filesystem.getInfo("onlinemappacks/" .. mappacks[i] .. ".zip") or love.filesystem.getInfo(mappackfolder .. "/" .. mappacks[i] .. "/version.txt"))) or not love.filesystem.getInfo( mappackfolder .. "/" .. mappacks[i] .. "/settings.txt") then
 				table.insert(delete, i)
 			end
 		end
@@ -2451,7 +2437,7 @@ function menu_keypressed(key, unicode)
 					optionsselection = 1
 				end
 			elseif optionstab == 3 then
-				if optionsselection < 11 then
+				if optionsselection < 10 then
 					optionsselection = optionsselection + 1
 				else
 					optionsselection = 1
@@ -2485,7 +2471,7 @@ function menu_keypressed(key, unicode)
 					end
 					optionsselection = limit
 				elseif optionstab == 3 then
-					optionsselection = 11
+					optionsselection = 10
 				elseif optionstab == 4 and gamefinished then
 					optionsselection = 11
 				end
@@ -2558,12 +2544,6 @@ function menu_keypressed(key, unicode)
 				elseif optionsselection == 10 then
 					vsync = not vsync
 					changescale(scale)
-				elseif optionsselection == 11 then
-					if mappackfolder == "mappacks" then
-						mappackfolder = "alesans_entities/mappacks"
-						mappack = "smb"
-						loadbackground("1-1.txt")
-					end
 				end
 			elseif optionstab == 4 then
 				if optionsselection == 2 then
@@ -2693,12 +2673,6 @@ function menu_keypressed(key, unicode)
 				elseif optionsselection == 10 then
 					vsync = not vsync
 					changescale(scale)
-				elseif optionsselection == 11 then
-					if mappackfolder == "alesans_entities/mappacks" then
-						mappackfolder = "mappacks"
-						mappack = "smb"
-						loadbackground("1-1.txt")
-					end
 				end
 			elseif optionstab == 4 then
 				if optionsselection == 2 then
@@ -2763,10 +2737,10 @@ function menu_keypressed(key, unicode)
 						notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android >\nalesans_entities > characters", notice.red, 15)
 						return false
 					end
-					if not love.filesystem.getInfo("alesans_entities/characters") then
-						love.filesystem.createDirectory("alesans_entities/characters")
+					if not love.filesystem.getInfo("characters") then
+						love.filesystem.createDirectory("characters")
 					end
-					love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/alesans_entities/characters")
+					love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/characters")
 				end
 			end
 		elseif key == "escape" then
@@ -3085,9 +3059,9 @@ function reset_mappacks()
 	delete_mappack("portal")
 	delete_mappack("alesans_entities_mappack")
 
-	--[[local dlclist = love.filesystem.getDirectoryItems("alesans_entities/onlinemappacks/")
+	--[[local dlclist = love.filesystem.getDirectoryItems("onlinemappacks/")
 	for i = 1, #dlclist do
-		love.filesystem.remove("alesans_entities/onlinemappacks/" .. dlclist[i])
+		love.filesystem.remove("onlinemappacks/" .. dlclist[i])
 	end]]
 	
 	loadbackground("1-1.txt")
@@ -3190,13 +3164,13 @@ function opendlcfolder()
 	end
 
 	if android then
-		notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android >\nalesans_entities > " .. path, notice.red, 15)
+		notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_aces > " .. path, notice.red, 15)
 		return false
 	end
-	if not love.filesystem.getInfo("alesans_entities/" .. path) then
-		love.filesystem.createDirectory("alesans_entities/" .. path)
+	if not love.filesystem.getInfo(path) then
+		love.filesystem.createDirectory(path)
 	end
-	love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/alesans_entities/" .. path)
+	love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. path)
 end
 
 --https://stackoverflow.com/questions/20459943/find-the-last-index-of-a-character-in-a-string/20461414
@@ -3215,7 +3189,7 @@ function menu_filedropped(file)
 	if gamestate == "mappackmenu" then
 		--drag and drop zip file
 		local filename = string.sub(file:getFilename(), (lastIndexOf(file:getFilename(), "\\") or -5)+1, -1)
-		local newfilepath = "alesans_entities/onlinemappacks/" .. filename
+		local newfilepath = "onlinemappacks/" .. filename
 		if filename:sub(-4,-1) == ".zip" and not love.filesystem.getInfo(newfilepath) then --only copy if file doesn't exist
 			local filedata = love.filesystem.newFileData(file)
 			love.filesystem.write(newfilepath, filedata) --copy file

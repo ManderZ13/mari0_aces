@@ -1,8 +1,8 @@
 DCversion = "3.1"
 
 --future updates just incase I feel like adding more later
-if love.filesystem.getInfo("alesans_entities/daily_challenge_expansion.data") then
-	ok, chunk = pcall(love.filesystem.load, "alesans_entities/daily_challenge_expansion.data")
+if love.filesystem.getInfo("daily_challenge_expansion.data") then
+	ok, chunk = pcall(love.filesystem.load, "daily_challenge_expansion.data")
 	if ok then
 		local ok, result = pcall(chunk)
 		if ok then

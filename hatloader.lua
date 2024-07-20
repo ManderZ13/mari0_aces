@@ -6,7 +6,12 @@ bighat = {}
 hatcount = 0
 local hati = 33+1 --defaulthats + 1 (makes sure hats are loaded in the correct order (defaults then customs))
 function loadhat(path, imgpath)
-	local imgpath = imgpath or "alesans_entities"
+	if imgpath ~= nil then
+		imgpath = imgpath .. "/"
+	else
+		imgpath = ""
+	end
+
 	local d
 	if type(path) == "table" then
 		d = path
@@ -26,12 +31,12 @@ function loadhat(path, imgpath)
 	t.x = d.x
 	t.y = d.y
 	t.height = d.height
-	t.graphic = love.graphics.newImage(imgpath .. "/hats/" .. d.graphic .. ".png")
+	t.graphic = love.graphics.newImage(imgpath .. "hats/" .. d.graphic .. ".png")
 	if d.sliding then
-		t.sliding = love.graphics.newImage(imgpath .. "/hats/" .. d.sliding .. ".png")
+		t.sliding = love.graphics.newImage(imgpath .. "hats/" .. d.sliding .. ".png")
 	end
 	if d.death then
-		t.death = love.graphics.newImage(imgpath .. "/hats/" .. d.death .. ".png")
+		t.death = love.graphics.newImage(imgpath .. "hats/" .. d.death .. ".png")
 	end
 	t.directions = d.directions
 	t.quad = {} --side, front, back
@@ -50,21 +55,21 @@ function loadhat(path, imgpath)
 	t.x = d.bigx --BIG D
 	t.y = d.bigy
 	t.height = d.bigheight
-	t.graphic = love.graphics.newImage(imgpath .. "/hats/" .. d.biggraphic .. ".png")
+	t.graphic = love.graphics.newImage(imgpath .. "hats/" .. d.biggraphic .. ".png")
 	if d.bigemblem then
-		t.emblem = love.graphics.newImage(imgpath .. "/hats/" .. d.bigemblem .. ".png")
+		t.emblem = love.graphics.newImage(imgpath .. "hats/" .. d.bigemblem .. ".png")
 	end
 	if d.bigsliding then
-		t.sliding = love.graphics.newImage(imgpath .. "/hats/" .. d.bigsliding .. ".png")
+		t.sliding = love.graphics.newImage(imgpath .. "hats/" .. d.bigsliding .. ".png")
 	end
 	if d.bigslidingemblem then
-		t.slidingemblem = love.graphics.newImage(imgpath .. "/hats/" .. d.bigslidingemblem .. ".png")
+		t.slidingemblem = love.graphics.newImage(imgpath .. "hats/" .. d.bigslidingemblem .. ".png")
 	end
 	if d.raccoon then
-		t.raccoon = love.graphics.newImage(imgpath .. "/hats/" .. d.raccoon .. ".png")
+		t.raccoon = love.graphics.newImage(imgpath .. "hats/" .. d.raccoon .. ".png")
 	end
 	if d.raccoonsliding then
-		t.raccoonsliding = love.graphics.newImage(imgpath .. "/hats/" .. d.raccoonsliding .. ".png")
+		t.raccoonsliding = love.graphics.newImage(imgpath .. "hats/" .. d.raccoonsliding .. ".png")
 	end
 	t.directions = d.directions
 	t.quad = {} --side, front, back
@@ -86,10 +91,10 @@ function loadhat(path, imgpath)
 	hatcount = hatcount + 1
 end
 
-local files = love.filesystem.getDirectoryItems("alesans_entities/hats")
+local files = love.filesystem.getDirectoryItems("hats")
 
 for i, v in pairs(files) do
 	if string.sub(v, -5, -1) == ".json" then
-		loadhat("alesans_entities/hats/" .. v)
+		loadhat("hats/" .. v)
 	end
 end

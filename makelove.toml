@@ -1,6 +1,5 @@
-name = "mari0_ae"
-default_targets = ["win32", "win64", "appimage", "macos"]
-build_directory = "makelove-build"
+name = "mari0_aces"
+default_targets = ["win32", "win64", "macos"]
 icon_file = "graphics/icon.png"
 
 love_files = [
@@ -8,13 +7,19 @@ love_files = [
     "-*/.*",
 ]
 
-# TODO: more metadata
+[archive_files]
+"README.md" = "README.md"
+"LICENSE.txt" = "LICENSE.txt"
 
 [windows.exe_metadata]
-ProductName = "Mari0: AE"
+ProductName = "Mari0: ACES"
+CompanyName = "KirbyKidJ"
+LegalCopyright = "Copyright © 2006-2024 Maurice Guégan"
 
 [linux.desktop_file_metadata]
-Name = "Mari0: AE"
+Name = "Mari0: ACES"
 
 [macos.app_metadata]
-CFBundleDisplayName = "Mari0: AE"
+CFBundleDisplayName = "Mari0: ACES"
+CFBundleIdentifier = "com.kirbykidj"
+NSHumanReadableCopyright = "Copyright © 2006-2024 Maurice Guégan"

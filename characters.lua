@@ -28,20 +28,20 @@ end
 
 function loadcustomplayers()
 	characters = {list = {}, data = {}}
-	local dir = love.filesystem.getDirectoryItems("alesans_entities/characters")
+	local dir = love.filesystem.getDirectoryItems("characters")
 
 	-- mount zips
 	for i, v in ipairs(dir) do
 		if v:sub(-4, -1) == ".zip" then
-			mountto("alesans_entities/characters/" .. v, "alesans_entities/characters")
+			mountto("characters/" .. v, "characters")
 		end
 	end
 	-- refresh with new mounted items
-	dir = love.filesystem.getDirectoryItems("alesans_entities/characters")
+	dir = love.filesystem.getDirectoryItems("characters")
 
 	-- load characters
 	for i, v in ipairs(dir) do
-		local folder = "alesans_entities/characters/" .. v
+		local folder = "characters/" .. v
 
 		if love.filesystem.getInfo(folder .. "/config.json") then
 			local playerstuff = {
@@ -426,11 +426,11 @@ function loadcustomplayers()
 						local n = v .. "animations"
 						if imgs[n] and not love.filesystem.getInfo(folder .. "/" .. n .. "1.png") then
 							characters.data[i][n] = {}
-							local imgdata = splitimage("alesans_entities/characters/" .. i .. "/" .. n .. ".png", characters.data[i].splitcolors, true, "imagedata")
-							imgdata:encode("png", "alesans_entities/characters/" .. i .. "/" .. n .. "0.png")
+							local imgdata = splitimage("characters/" .. i .. "/" .. n .. ".png", characters.data[i].splitcolors, true, "imagedata")
+							imgdata:encode("png", "characters/" .. i .. "/" .. n .. "0.png")
 							for j = 1, #characters.data[i].colorables do
-								local imgdata = splitimage("alesans_entities/characters/" .. i .. "/" .. n .. ".png", characters.data[i].splitcolors[j], nil, "imagedata")
-								imgdata:encode("png", "alesans_entities/characters/" .. i .. "/" .. n .. j .. ".png")
+								local imgdata = splitimage("characters/" .. i .. "/" .. n .. ".png", characters.data[i].splitcolors[j], nil, "imagedata")
+								imgdata:encode("png", "characters/" .. i .. "/" .. n .. j .. ".png")
 							end
 						end
 					end
@@ -529,11 +529,11 @@ end
 
 function setcustomplayer(i, pn, initial) --name, player number, initial (don't change colors to defaults)
 	if i and characters.data[i] then
-		if love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/config.txt") then
+		if love.filesystem.getInfo("characters/" .. i .. "/config.txt") then
 			--incompatible probably
-			if love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/animationsBAK.png") then --SE Character
+			if love.filesystem.getInfo("characters/" .. i .. "/animationsBAK.png") then --SE Character
 				notice.new("Incompatible Character Detected\nUse characters made for mari0:AE!", notice.red, 5)
-			elseif not love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/config.json") then --Old Character Format
+			elseif not love.filesystem.getInfo("characters/" .. i .. "/config.json") then --Old Character Format
 				notice.new("Incompatible Character Detected\nUse characters made for\nmari0:AE version " .. VERSIONSTRING .. "!", notice.red, 5)
 			end
 		end
@@ -545,20 +545,20 @@ function setcustomplayer(i, pn, initial) --name, player number, initial (don't c
 				if imgs[n] then
 					characters.data[i][n] = {}
 					if #characters.data[i].colors == #characters.data[i].colorables and not characters.data[i].dontsplitcolors then
-						characters.data[i][n][0] = splitimage("alesans_entities/characters/" .. i .. "/" .. n .. ".png", characters.data[i].colors, true)
+						characters.data[i][n][0] = splitimage("characters/" .. i .. "/" .. n .. ".png", characters.data[i].colors, true)
 						for j = 1, #characters.data[i].colorables do
-							characters.data[i][n][j] = splitimage("alesans_entities/characters/" .. i .. "/" .. n .. ".png", characters.data[i].colors[j])
+							characters.data[i][n][j] = splitimage("characters/" .. i .. "/" .. n .. ".png", characters.data[i].colors[j])
 						end
-					elseif love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/" .. n .. "1.png") then
+					elseif love.filesystem.getInfo("characters/" .. i .. "/" .. n .. "1.png") then
 						for j = 0, #characters.data[i].colorables do
-							if not love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/" .. n .. j .. ".png") then
+							if not love.filesystem.getInfo("characters/" .. i .. "/" .. n .. j .. ".png") then
 								characters.data[i][n][j] = blankimg
 							else
-								characters.data[i][n][j] = love.graphics.newImage("alesans_entities/characters/" .. i .. "/" .. n .. j .. ".png")
+								characters.data[i][n][j] = love.graphics.newImage("characters/" .. i .. "/" .. n .. j .. ".png")
 							end
 						end
 					else
-						characters.data[i][n][0] = love.graphics.newImage("alesans_entities/characters/" .. i .. "/" .. n .. ".png")
+						characters.data[i][n][0] = love.graphics.newImage("characters/" .. i .. "/" .. n .. ".png")
 						for j = 1, #characters.data[i].colorables do
 							characters.data[i][n][j] = blankimg
 						end
@@ -568,15 +568,15 @@ function setcustomplayer(i, pn, initial) --name, player number, initial (don't c
 				end
 			end
 			--cape and bunnyears
-			if love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/cape.png") then
-				characters.data[i].capeimg = love.graphics.newImage("alesans_entities/characters/" .. i .. "/cape.png")
+			if love.filesystem.getInfo("characters/" .. i .. "/cape.png") then
+				characters.data[i].capeimg = love.graphics.newImage("characters/" .. i .. "/cape.png")
 			end
-			if love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/bunnyears.png") then
-				characters.data[i].bunnyears = love.graphics.newImage("alesans_entities/characters/" .. i .. "/bunnyears.png")
+			if love.filesystem.getInfo("characters/" .. i .. "/bunnyears.png") then
+				characters.data[i].bunnyears = love.graphics.newImage("characters/" .. i .. "/bunnyears.png")
 			end
 			--health counter
-			if love.filesystem.getInfo("alesans_entities/characters/" .. i .. "/health.png") then
-				local img = love.graphics.newImage("alesans_entities/characters/" .. i .. "/health.png")
+			if love.filesystem.getInfo("characters/" .. i .. "/health.png") then
+				local img = love.graphics.newImage("characters/" .. i .. "/health.png")
 				characters.data[i].healthimg = img
 				local w, h = img:getWidth(), img:getHeight()
 				local t = {}
