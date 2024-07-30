@@ -1,6 +1,6 @@
 local queuespritebatchupdate = false
 
-function game_load(suspended)
+function game_load(suspended, levelarg, subarg)
 	scrollfactor = 0
 	scrollfactory = 0
 	scrollfactor2 = 0
@@ -95,6 +95,8 @@ function game_load(suspended)
 		updatemappacksettings()
 	elseif suspended then
 		marioworld = suspended
+		if levelarg then mariolevel = levelarg end
+		if subarg then mariosublevel = subarg end
 	end
 	
 	--remove custom sprites

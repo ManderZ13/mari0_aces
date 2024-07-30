@@ -159,14 +159,19 @@ function levelscreen_load(reason, i)
 	end
 	
 	if tonumber(marioworld) and not reachedworlds[mappack][marioworld] and gamestate ~= "mappackfinished" then
-		if marioworld > 8 then
-			for i = 1, marioworld-1 do
-				if reachedworlds[mappack][i] == nil then
-					reachedworlds[mappack][i] = false
+		for j = 1, marioworld do
+			for k = 1, #mappacklevels[j] do
+				if reachedworlds[mappack][j] == nil and love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. j .. "-" .. k .. ".txt") then
+					reachedworlds[mappack][j] = {}
+					if reachedworlds[mappack][j][k] == nil then
+						reachedworlds[mappack][j][k] = false
+					end
 				end
 			end
 		end
-		reachedworlds[mappack][marioworld] = true
+	end
+	if not reachedworlds[mappack][marioworld][mariolevel] then
+		reachedworlds[mappack][marioworld][mariolevel] = true
 		updated = true
 	end
 	

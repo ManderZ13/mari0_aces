@@ -556,33 +556,24 @@ function menu_draw()
 			love.graphics.translate(tx, ty)
 			
 			if continueavailable then
-				if i == 9 then if mouseonselecthold and mouseonselect == 0 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
+				if i == 9 then if not selectworldopen and mouseonselecthold and mouseonselect == 0 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
 				properprintfunc(TEXT["continue game"], (143-(math.ceil(utf8.len(TEXT["continue game"])/2)*8))*scale, 122*scale)
 			end
 			
-			if i == 9 then if mouseonselecthold and mouseonselect == 1 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
+			if i == 9 then if not selectworldopen and mouseonselecthold and mouseonselect == 1 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
 			properprintfunc(TEXT["player game"], (143-(math.ceil((utf8.len(TEXT["player game"])+2)/2)*8)+16)*scale, 138*scale)
 			
 			properprintfunc(players, (143-(math.ceil((utf8.len(TEXT["player game"])+2)/2)*8))*scale, 138*scale)
-			if i == 9 then if (mouseonselecthold and mouseonselect == 2) or nofunallowed then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
+			if i == 9 then if (not selectworldopen and mouseonselecthold and mouseonselect == 2) or nofunallowed then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
 			properprintfunc(TEXT["level editor"], (143-(math.ceil(utf8.len(TEXT["level editor"])/2)*8))*scale, 154*scale)
 			
-			if i == 9 then if mouseonselecthold and mouseonselect == 3 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
+			if i == 9 then if not selectworldopen and mouseonselecthold and mouseonselect == 3 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
 			properprintfunc(TEXT["select mappack"], (143-(math.ceil(utf8.len(TEXT["select mappack"])/2)*8))*scale, 170*scale)
 			
-			if i == 9 then if mouseonselecthold and mouseonselect == 4 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
+			if i == 9 then if not selectworldopen and mouseonselecthold and mouseonselect == 4 then love.graphics.setColor(188/255, 188/255, 188/255) else love.graphics.setColor(1, 1, 1) end end
 			properprintfunc(TEXT["options"], (143-(math.ceil(utf8.len(TEXT["options"])/2)*8))*scale, 186*scale)
 			
 			if i == 9 then love.graphics.setColor(1, 1, 1) end
-			
-			--[[if not (not disabletips and menutipoffset > -width*16) then
-				if not (custombackground or customforeground) or hudoutline then
-					love.graphics.setColor(0, 0, 0)
-					properprint("mod by alesan99", (width*16-#("mod by alesan99")*8-7)*scale, 209*scale) --a little less intrusive
-					love.graphics.setColor(1, 1, 1)
-				end
-				properprint("mod by alesan99", (width*16-#("mod by alesan99")*8-8)*scale, 208*scale) --a little less intrusive
-			end]]
 			
 			love.graphics.translate(-tx, -ty)
 		end
@@ -603,16 +594,24 @@ function menu_draw()
 			properprintF(TEXT["select world"], (130-(utf8.len(TEXT["select world"])*4))*scale, 105*scale)
 			
 			local sc = selectworldcursor
+			local sl = selectlevelcursor
 			local v = math.ceil(sc/8)*8-7
 			
 			local i2 = 1
 			for i = v, v+7 do
-				if selectworldcursor == i then
-					love.graphics.setColor(1, 1, 1)
-				elseif reachedworlds[mappack][i] then
-					love.graphics.setColor(200/255, 200/255, 200/255)
+				if sc == i then
+					if mouseonselect == 1 and mouseonselecthold then
+						love.graphics.setColor(188/255, 188/255, 188/255)
+					else
+						love.graphics.setColor(1, 1, 1)
+					end
 				elseif selectworldexists[i] then
-					love.graphics.setColor(50/255, 50/255, 50/255)
+					local reachedlevel = firstreachedworld(i, i)
+					if reachedlevel ~= nil and reachedlevel[2] then
+						love.graphics.setColor(200/255, 200/255, 200/255)
+					else
+						love.graphics.setColor(50/255, 50/255, 50/255)
+					end
 				else
 					love.graphics.setColor(0, 0, 0)
 				end
@@ -624,6 +623,30 @@ function menu_draw()
 				properprint(world, (55+(i2-1)*20)*scale, 130*scale)
 				if i == sc then
 					properprint("v", (55+(i2-1)*20)*scale, 120*scale)
+
+					-- Level Tab
+					if gamefinished then
+						love.graphics.setColor(1, 1, 1)
+						properprint("-", (55+(i2-1)*20)*scale, 140*scale)
+						
+						local slen = #tostring(sl)
+						love.graphics.setColor(0, 0, 0)
+						love.graphics.rectangle("fill", (53+(i2-1)*20-(4*(slen-1)))*scale, 151*scale, 12+(8*slen)*scale, 12*scale)
+
+						local x = 54+(i2-1)*20-(4*(slen-1))
+						local y = 150
+						local width = 12+(8*(slen-1))
+						local height = 12
+						love.graphics.rectangle("fill", x*scale, y*scale, width*scale, scale)
+
+						love.graphics.setColor(1, 1, 1)
+						love.graphics.rectangle("fill", x*scale, y*scale, scale, height*scale)
+						love.graphics.rectangle("fill", x*scale, (y+height-1)*scale, width*scale, scale)
+						love.graphics.rectangle("fill", (x+width-1)*scale, y*scale, scale, height*scale)
+
+						if mouseonselect == 2 and mouseonselecthold then love.graphics.setColor(188/255, 188/255, 188/255) end
+						properprint(sl, (55+(i2-1)*20-(4*(slen-1)))*scale, 152*scale)
+					end
 				end
 				i2 = i2 + 1
 			end
@@ -848,6 +871,7 @@ function menu_draw()
 					local qi = 2
 					if (not onlinedlc) then
 						qi = 3
+					elseif asset.type == "enemy" then
 						qi = 5
 					elseif asset.type == "character" then
 						qi = 6
@@ -2102,6 +2126,29 @@ function loaddailychallenge()
 	return true
 end
 
+function firstreachedworld(from, to)
+	local world = 1
+	local level = 1
+	local inc = 1
+	from = from or 1
+	to = to or #mappacklevels
+	if to < from then inc = -1 end
+
+	for i = from, to, inc do
+		if reachedworlds[mappack][i] then
+			world = i
+			local reachedlevels = reachedworlds[mappack][i]
+			for j = 1, #mappacklevels[i] do
+				if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") and reachedlevels[j] then
+					level = j
+					return {world, level}
+				end
+			end
+		end
+	end
+	return nil
+end
+
 function menu_keypressed(key, unicode)
 	if languagemenuopen then
 		if languagemenu_keypressed(key, unicode) then
@@ -2112,24 +2159,36 @@ function menu_keypressed(key, unicode)
 	if gamestate == "menu" then
 		if selectworldopen then
 			if (key == "right" or key == "d") then
-				local target = selectworldcursor+1
-				while target <= #mappacklevels and not reachedworlds[mappack][target] do
-					target = target + 1
-				end
-				if target <= #mappacklevels then
-					selectworldcursor = target
+				local target = firstreachedworld(selectworldcursor+1)
+				if target then
+					selectworldcursor = target[1]
+					selectlevelcursor = target[2]
 				end
 			elseif (key == "left" or key == "a") then
-				local target = selectworldcursor-1
-				while target > 0 and not reachedworlds[mappack][target] do
+				local target = firstreachedworld(selectworldcursor-1, 1)
+				if target then
+					selectworldcursor = target[1]
+					selectlevelcursor = target[2]
+				end
+			elseif gamefinished and (key == "down" or key == "s") then
+				local target = selectlevelcursor+1
+				while target <= #mappacklevels[selectworldcursor] and not reachedworlds[mappack][selectworldcursor][target] do
+					target = target + 1
+				end
+				if target <= #mappacklevels[selectworldcursor] then
+					selectlevelcursor = target
+				end
+			elseif gamefinished and (key == "up" or key == "w") then
+				local target = selectlevelcursor-1
+				while target > 0 and not reachedworlds[mappack][selectworldcursor][target] do
 					target = target - 1
 				end
 				if target > 0 then
-					selectworldcursor = target
+					selectlevelcursor = target
 				end
 			elseif (key == "return" or key == "enter" or key == "kpenter" or key == " ") then
 				selectworldopen = false
-				game_load(selectworldcursor)
+				game_load(selectworldcursor, selectlevelcursor)
 			elseif key == "escape" then
 				selectworldopen = false
 			end
@@ -2759,47 +2818,8 @@ function menu_mousepressed(x, y, button)
 	if gamestate == "menu" then
 		menu_updatemouseselection(x,y)
 		if mouseonselect then
-			if selectworldopen then
-				local x, y = x/scale, y/scale
-				local sc = selectworldcursor
-				local v = math.ceil(sc/8)*8-7
-				if x > 35 and x < 43 and y > 130 and y < 138 then
-					local target = selectworldcursor-1
-					while target > 0 and not reachedworlds[mappack][target] do
-						target = target - 1
-					end
-					if target > 0 then
-						selectworldcursor = target
-					end
-					return
-				end
-				if x > 215 and x < 223 and y > 130 and y < 138 then
-					local target = selectworldcursor+1
-					while target <= #mappacklevels and not reachedworlds[mappack][target] do
-						target = target + 1
-					end
-					if target <= #mappacklevels then
-						selectworldcursor = target
-					end
-					return
-				end
-				local i2 = 1
-				for i = v, v+7 do
-					local world = i
-					if hudworldletter and i > 9 and i <= 9+#alphabet then
-						world = alphabet:sub(i-9, i-9)
-					end
-					if reachedworlds[mappack][i] and x > (54+(i2-1)*20) and x < (54+(i2-1)*20)+12 and y > 128 and y < 140 then
-						selectworldopen = false
-						game_load(i)
-						break
-					end
-					i2 = i2 + 1
-				end
-			else
-				--hold down menu buttons
-				mouseonselecthold = true
-			end
+			--hold down menu buttons
+			mouseonselecthold = true
 		end
 		--sausage D:
 		if button == "l" and (not customsprites) and x > 179*scale and y > 71*scale and x < 201*scale and y < 96*scale then
@@ -2866,28 +2886,45 @@ function menu_mousereleased(x, y, button)
 	end
 	if gamestate == "menu" then
 		if mouseonselect and mouseonselecthold then
-			if mouseonselect == 0 then
-				game_load(true)
-			elseif mouseonselect == 1 then
-				selectworld()
-			elseif mouseonselect == 2 then
-				if nofunallowed then
-					notice.new("Creator disabled the editor.", notice.white, 2)
-					return false
+			if selectworldopen then
+				if mouseonselect == 1 then
+					selectworldopen = false
+					game_load(selectworldcursor, selectlevelcursor)
+				elseif mouseonselect == 2 then
+					local target = selectlevelcursor+1
+					while target <= #mappacklevels[selectworldcursor] and not reachedworlds[mappack][selectworldcursor][target] do
+						target = target + 1
+					end
+					if target > #mappacklevels[selectworldcursor] then
+						selectlevelcursor = firstreachedworld(selectworldcursor, selectworldcursor)[2]
+					else
+						selectlevelcursor = target
+					end
 				end
-				editormode = true
-				players = 1
-				playertype = "portal"
-				playertypei = 1
-				disablecheats()
-				loadeditormetadata()
-				game_load()
-				return
-			elseif mouseonselect == 3 then
-				gamestate = "mappackmenu"
-				mappacks()
-			elseif mouseonselect == 4 then
-				gamestate = "options"
+			else
+				if mouseonselect == 0 then
+					game_load(true)
+				elseif mouseonselect == 1 then
+					selectworld()
+				elseif mouseonselect == 2 then
+					if nofunallowed then
+						notice.new("Creator disabled the editor.", notice.white, 2)
+						return false
+					end
+					editormode = true
+					players = 1
+					playertype = "portal"
+					playertypei = 1
+					disablecheats()
+					loadeditormetadata()
+					game_load()
+					return
+				elseif mouseonselect == 3 then
+					gamestate = "mappackmenu"
+					mappacks()
+				elseif mouseonselect == 4 then
+					gamestate = "options"
+				end
 			end
 		end
 		mouseonselecthold = false
@@ -3144,10 +3181,33 @@ function selectworld()
 	end
 	
 	local noworlds = true
-	for i = 2, #mappacklevels do
-		if reachedworlds[mappack][i] then
-			noworlds = false
-			break
+	local target = firstreachedworld()
+	if target then
+		selectworldcursor = target[1]
+		selectlevelcursor = target[2]
+	end
+	if gamefinished then
+		local levels = 0
+		for i = 1, #mappacklevels do
+			if not noworlds then
+				break
+			end
+			for j = 1, #mappacklevels do
+				if reachedworlds[mappack][i][j] then
+					levels = levels + 1
+					if levels > 1 then
+						noworlds = false
+						break
+					end
+				end
+			end
+		end
+	else
+		for i = 2, #mappacklevels do
+			if reachedworlds[mappack][i] then
+				noworlds = false
+				break
+			end
 		end
 	end
 	
@@ -3157,12 +3217,12 @@ function selectworld()
 	end
 	
 	selectworldopen = true
-	selectworldcursor = 1
-	
 	selectworldexists = {}
 	for i = 1, #mappacklevels do
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. i .. "-1.txt") then
-			selectworldexists[i] = true
+		for j = 1, #mappacklevels[i] do
+			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") then
+				selectworldexists[i] = true
+			end
 		end
 	end
 end
@@ -3230,6 +3290,7 @@ end
 
 function menu_updatemouseselection(x,y)
 	if selectworldopen then
+		mouseonselect = false
 		local x, y = x/scale, y/scale
 		local sc = selectworldcursor
 		local v = math.ceil(sc/8)*8-7
@@ -3240,8 +3301,13 @@ function menu_updatemouseselection(x,y)
 			if hudworldletter and i > 9 and i <= 9+#alphabet then
 				world = alphabet:sub(i-9, i-9)
 			end
-			if reachedworlds[mappack][i] and x > (54+(i2-1)*20) and x < (54+(i2-1)*20)+12 and y > 128 and y < 140 then
-				selectworldcursor = i
+			if firstreachedworld(i, i) and x > (54+(i2-1)*20) and x < (54+(i2-1)*20)+12 then
+				if y > 128 and y < 140 then
+					selectworldcursor = i
+					mouseonselect = 1
+				elseif y > 150 and y < 162 then
+					mouseonselect = 2
+				end
 				break
 			end
 			i2 = i2 + 1

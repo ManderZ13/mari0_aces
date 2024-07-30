@@ -1296,16 +1296,24 @@ function saveconfig()
 	for i, v in pairs(reachedworlds) do
 		s = s .. "reachedworlds:" .. i .. ":"
 		
-		local n = math.max(8, #reachedworlds[i])
-		
-		for j = 1, n do
+		for j = 1, #reachedworlds[i] do
 			if v[j] then
-				s = s .. 1
+				for k = 1, #v[j] do
+					if v[j][k] then
+						s = s .. 1
+					else
+						s = s .. 0
+					end
+
+					if k ~= #v[j] then
+						s = s .. "-"
+					end
+				end
 			else
 				s = s .. 0
 			end
 			
-			if j == n then
+			if j == #reachedworlds[i] then
 				s = s .. ";"
 			else
 				s = s .. ","
@@ -1440,12 +1448,12 @@ function loadconfig(nodefaultconfig)
 			vsync = true
 		elseif s2[1] == "reachedworlds" then
 			reachedworlds[s2[2]] = {}
-			local s3 = s2[3]:split(",")
+			local s3 = s2[3]:split(",") or {s2[3]}
 			for i = 1, #s3 do
-				if tonumber(s3[i]) == 1 then
-					reachedworlds[s2[2]][i] = true
-				elseif #s3 > 8 then
-					reachedworlds[s2[2]][i] = false
+				local s4 = s3[i]:split("-") or {s3[i]}
+				reachedworlds[s2[2]][i] = {}
+				for j = 1, #s4 do
+					reachedworlds[s2[2]][i][j] = (tonumber(s4[j]) == 1)
 				end
 			end
 		elseif s2[1] == "resizable" then
