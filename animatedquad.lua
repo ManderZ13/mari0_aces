@@ -165,30 +165,8 @@ function animatedquad:getquad(x, y)
 end
 
 local function getquadprops(self)
-	local list = {"collision",
-	"invisible",
-	"breakable",
-	"coinblock",
-	"coin",
-	"portalable",
-	"platform",
-	"spikesup",
-	"spikesdown",
-	"spikesleft",
-	"spikesright",
-	"grate",
-	"water",
-	"mirror",
-	"foreground",
-	"bridge",
-	"lava",
-	"leftslant",
-	"rightslant",
-	"noteblock",
-	"vine",
-	"ice"}
 	local t = {}
-	for i, w in pairs(list) do
+	for i, w in pairs(quadproplist) do
 		t[w] = self[w]
 	end
 	return t

@@ -283,7 +283,7 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	guielements["livesincrease"] = guielement:new("button", 314, 104, "}", livesincrease, 0)
 	
 	guielements["physicsdropdown"] = guielement:new("dropdown", 294, 117, 11, changephysics, currentphysics, "mari0", "smb", "mari0-smb2j", "smb2j", "mari0-maker", "mario maker", "portal")
-	guielements["cameradropdown"] = guielement:new("dropdown", 294, 130, 11, changecamerasetting, camerasetting, "default", "centered"--[[, "forward only"]])
+	guielements["cameradropdown"] = guielement:new("dropdown", 294, 130, 11, changecamerasetting, camerasetting, "default", "centered", "forward only")
 	guielements["dropshadowcheckbox"] = guielement:new("checkbox", 294, 143, toggledropshadow, dropshadow, TEXT["drop shadow"])
 	guielements["realtimecheckbox"] = guielement:new("checkbox", 294, 154, togglerealtime, realtime, TEXT["real time"])
 	local _, count = TEXT["real time"]:gsub("\n", '')
@@ -372,9 +372,14 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	guielements["castletexttab"] = guielement:new("button", guielements["endingtexttab"].x+guielements["endingtexttab"].width+8, 40, TEXT["castle"], texttabtab, 2, {"castle"})
 	guielements["levelscreentexttab"] = guielement:new("button", guielements["castletexttab"].x+guielements["castletexttab"].width+8, 40, TEXT["levelscreen"], texttabtab, 2, {"levelscreen"})
 	
+	local customname = ""
+	if playername ~= mariocharacter[1] then
+		customname = playername
+	end
+
 	guielements["editendingtext1"] = guielement:new("input", 10, 67, 32, nil, endingtext[1], 32)
 	guielements["editendingtext2"] = guielement:new("input", 10, 81, 32, nil, endingtext[2], 32)
-	guielements["editplayername"] = guielement:new("input", 10, 67, 12, nil, playername, 12)
+	guielements["editplayername"] = guielement:new("input", 10, 67, 12, nil, customname, 12)
 	guielements["endingcolor"] = guielement:new("dropdown", 10, 97, 7, changeendingtextcolor, tablecontainsi(textcolorsnames, textcolorl), unpack(textcolorsnames))
 	guielements["endingcolor"].coloredtext = true
 	--guielements["endingcolor<"] = guielement:new("button", 10, 97, "{", endingtextcolorleft, 1)

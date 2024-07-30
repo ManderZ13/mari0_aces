@@ -777,8 +777,12 @@ function mario:update(dt)
 		end
 	end
 	if camerasetting == 3 and self.active and (not self.static) then
-		if self.x < xscroll then
-			self:die("time")
+		if self.x < objects["screenboundary"]["left"].x then
+			local x = math.floor(self.x+self.width/2)+1
+			local y = math.floor(self.y+self.height)+1
+			if tilequads[map[x][y][1]] and tilequads[map[x][y][1]].collision then
+				self:die("time")
+			end
 		end
 	end
 	if edgewrapping then --wrap around screen

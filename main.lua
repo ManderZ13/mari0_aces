@@ -1,30 +1,9 @@
 --[[
-	STEAL MY SHIT AND I'LL FUCK YOU UP
-	PRETTY MUCH EVERYTHING BY MAURICE GUÉGAN AND IF SOMETHING ISN'T BY ME THEN IT SHOULD BE OBVIOUS OR NOBODY CARES
-
-	Please keep in mind that for obvious reasons, I do not hold the rights to artwork, audio or trademarked elements of the game.
-	This license only applies to the code and original other assets. Obviously. Duh.
-	Anyway, enjoy.
-	
-	
-	
-	DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-              Version 2, December 2004
-
-	Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
-
-	Everyone is permitted to copy and distribute verbatim or modified
-	copies of this license document, and changing it is allowed as long
-	as the name is changed.
-
-			DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-	TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-	0. You just DO WHAT THE FUCK YOU WANT TO.]]
-	
---[[
+	CREDITS
 	-----------------------------------------------------------------------------
-	"AWESOME" mod by Alesan99
+	ACES extension mod by KirbyKidJ
+	Base mod by Alesan99
+	Mari0 by Maurice and StabYourself.net
 	
 	OTHER COOL DUDES
 	-Maurice and Fakeuser for regular turrets
@@ -52,7 +31,7 @@
 ]]
 
 --version check
-if love._version_major ~= 11 then error("You have an outdated version of Love2d! Get 11.5 and retry.") end
+if love._version_major < 11 then error("You have an outdated version of Love2d! Get 11.5 and retry.") end
 
 require("utils")
 hardloadhttps()
@@ -2141,10 +2120,10 @@ end
 
 function love.wheelmoved(x, y)
 	if y > 0 then
-        love.mousepressed(love.mouse.getX(), love.mouse.getY(), "wu")
-    elseif y < 0 then
-        love.mousepressed(love.mouse.getX(), love.mouse.getY(), "wd")
-    end
+		love.mousepressed(love.mouse.getX(), love.mouse.getY(), "wu")
+	elseif y < 0 then
+		love.mousepressed(love.mouse.getX(), love.mouse.getY(), "wd")
+	end
 end
 
 function love.filedropped(file)
@@ -2452,7 +2431,7 @@ function print_r (t, indent) --Not by me
 end
 
 function love.focus(f)
-	if (not f) and gamestate == "game"and (not editormode) and (not testlevel) and (not levelfinished) and (not everyonedead) and (not CLIENT) and (not SERVER) and (not dontPauseOnUnfocus) then
+	if not f and gamestate == "game" and not pausemenuopen and not editormode and not testlevel and not levelfinished and not everyonedead and not CLIENT and not SERVER and not dontPauseOnUnfocus then
 		pausemenuopen = true
 		pausedaudio = love.audio.pause()
 	end
@@ -2688,17 +2667,17 @@ function properprintbackground(s, x, y, include, color, size)
 end
 
 local function error_printer(msg, layer)
-    print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
+	print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
 function love.errorhandler(msg)
-    msg = tostring(msg)
+	msg = tostring(msg)
 
-    error_printer(msg, 2)
+	error_printer(msg, 2)
 
-    if not love.window or not love.graphics or not love.event then
-        return
-    end
+	if not love.window or not love.graphics or not love.event then
+		return
+	end
 	if not love.window.isOpen() then
 		local success, status = pcall(love.window.setMode, 800, 600)
 		if not success or not status then
@@ -2720,9 +2699,9 @@ function love.errorhandler(msg)
 		love.graphics.captureScreenshot(function(s) screenshot = s end)
 	end
 
-    -- Load.
-    if love.audio then love.audio.stop() end
-    love.graphics.reset()
+	-- Load.
+	if love.audio then love.audio.stop() end
+	love.graphics.reset()
 	love.graphics.setBackgroundColor(0, 0, 0)
 	local fontscale = scale or 2
 	if not font then
@@ -2731,32 +2710,32 @@ function love.errorhandler(msg)
 	end
 	love.graphics.setFont(font)
 
-    love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.setColor(1, 1, 1, 1)
 
-    local trace = debug.traceback()
+	local trace = debug.traceback()
 
-    love.graphics.clear()
+	love.graphics.clear()
 
 	local err = {}
 	local traceback = {}
 
-    table.insert(err, "Error\n")
-    table.insert(err, msg.."\n\n")
+	table.insert(err, "Error\n")
+	table.insert(err, msg.."\n\n")
 
-    for l in string.gmatch(trace, "(.-)\n") do
-        if not string.match(l, "boot.lua") then
-            l = string.gsub(l, "stack traceback:", "Traceback [" .. VERSION .. "]\n")
-            table.insert(traceback, l)
-        end
-    end
+	for l in string.gmatch(trace, "(.-)\n") do
+		if not string.match(l, "boot.lua") then
+			l = string.gsub(l, "stack traceback:", "Traceback [" .. VERSION .. "]\n")
+			table.insert(traceback, l)
+		end
+	end
 	
-    local p = table.concat(err, "\n")
-    local p2 = table.concat(traceback, "\n")
+	local p = table.concat(err, "\n")
+	local p2 = table.concat(traceback, "\n")
 	
-    p = string.gsub(p, "\t", "")
-    p = string.gsub(p, "%[string \"(.-)\"%]", "%1")
+	p = string.gsub(p, "\t", "")
+	p = string.gsub(p, "%[string \"(.-)\"%]", "%1")
 
-    p2 = string.gsub(p2, "\t", "")
+	p2 = string.gsub(p2, "\t", "")
 	p2 = string.gsub(p2, "%[string \"(.-)\"%]", "%1")
 	p2 = p2 .. "\n\nCrash saved in\nmari0_aces\\crashes"
 	
@@ -2782,7 +2761,7 @@ function love.errorhandler(msg)
 		love.filesystem.write("crashes/" .. #items+1 .. ".txt", s)
 	end
 	
-    local function draw()
+	local function draw()
 		love.graphics.clear(love.graphics.getBackgroundColor())
 		if screenshot then
 			love.graphics.setColor(30/255, 30/255, 30/255)
@@ -2796,9 +2775,9 @@ function love.errorhandler(msg)
 		love.graphics.printf({{1,1,1,1},p,{1,1,1,100/255},p2}, 10, 10, (love.graphics.getWidth() - 10)/fontscale, nil, 0, fontscale, fontscale)
 		love.graphics.print("Mari0 ACES Version " .. VERSIONSTRING, love.graphics.getWidth() - font:getWidth("Mari0 ACES Version " .. VERSIONSTRING)*fontscale - 5*scale, love.graphics.getHeight() - 15*scale, 0, fontscale, fontscale)
 		love.graphics.present()
-    end
+	end
 	
-    draw()
+	draw()
 	
 	local e, a, b, c
 	
@@ -2830,10 +2809,10 @@ function love.errorhandler(msg)
 end
 
 function love.quit()
-    if CLIENT or SERVER then
+	if CLIENT or SERVER then
 		net_quit()
 	end
-    return false
+	return false
 end
 
 
@@ -2979,30 +2958,30 @@ function dothesausage(i)
 end
 
 function shallowcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in pairs(orig) do
-            copy[orig_key] = orig_value
-        end
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
+	local orig_type = type(orig)
+	local copy
+	if orig_type == 'table' then
+			copy = {}
+			for orig_key, orig_value in pairs(orig) do
+					copy[orig_key] = orig_value
+			end
+	else -- number, string, boolean, etc
+			copy = orig
+	end
+	return copy
 end
 
 function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
+	local orig_type = type(orig)
+	local copy
+	if orig_type == 'table' then
+			copy = {}
+			for orig_key, orig_value in next, orig, nil do
+					copy[deepcopy(orig_key)] = deepcopy(orig_value)
+			end
+			setmetatable(copy, deepcopy(getmetatable(orig)))
+	else -- number, string, boolean, etc
+			copy = orig
+	end
+	return copy
 end

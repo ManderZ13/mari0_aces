@@ -191,7 +191,7 @@ function savecustomtext()
 	s = s .. string.format("endingtextcolor=%s, %s, %s", round(color[1]*255), round(color[2]*255), round(color[3]*255))
 	s = s .. "\r\nendingcolorname=" .. textcolorl
 	s = s .. "\r\nendingtext=" .. guielements["editendingtext1"].value .. "," .. guielements["editendingtext2"].value
-	s = s .. "\r\nplayername=" .. guielements["editplayername"].value
+	if guielements["editplayername"].value ~= "" then s = s .. "\r\nplayername=" .. guielements["editplayername"].value end
 	s = s .. "\r\n"
 	color = textcolors[textcolorp]
 	s = s .. string.format("hudtextcolor=%s, %s, %s", round(color[1]*255), round(color[2]*255), round(color[3]*255))

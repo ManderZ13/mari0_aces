@@ -36,7 +36,7 @@ function lobby_load()
 	guielements.mappackleft = guielement:new("button", 7, 57, "{", 
 		function() mappackselection = math.max(1, mappackselection-1); guielements.mappack.text = mappacklist[mappackselection]:lower(); guielements.mappack.textcolor = {.5, .5, .5} end, 1)
 	guielements.mappackright = guielement:new("button", 219, 57, "}", 
-		function() mappackselection = math.min(#mappacklist, mappackselection+1); guielements.mappack.text = mappacklist[mappackselection]:lower(); guielements.mappack.textcolor = {.5, .5, .5} end, 1)
+		function() mappackselection = math.min(#mappacklist-1, mappackselection+1); guielements.mappack.text = mappacklist[mappackselection]:lower(); guielements.mappack.textcolor = {.5, .5, .5} end, 1)
 	if CLIENT then
 		guielements.infinitelives.active = false
 		guielements.infinitetime.active = false

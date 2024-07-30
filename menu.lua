@@ -75,12 +75,7 @@ function menu_load()
 	mariosublevel = 0
 	actualsublevel = 0
 	
-	--load 1-1 as background
-	if mappackbackground and mappackbackground[mappackselection] then
-		loadbackground(mappackbackground[mappackselection] .. ".txt")
-	else
-		loadbackground("1-1.txt")
-	end
+	reset_background()
 	
 	--tips
 	if TEXT["menutips"] then
@@ -97,6 +92,11 @@ function menu_load()
 	currentcustomplayer = false
 	
 	skipupdate = true
+
+	if not CurrentLanguage then
+		languagemenuopen = true
+		languagemenu_open()
+	end
 end
 
 function menu_update(dt)
@@ -622,7 +622,7 @@ function menu_draw()
 					world = alphabet:sub(i-9, i-9)
 				end
 				properprint(world, (55+(i2-1)*20)*scale, 130*scale)
-				if i == selectworldcursor then
+				if i == sc then
 					properprint("v", (55+(i2-1)*20)*scale, 120*scale)
 				end
 				i2 = i2 + 1
@@ -848,11 +848,10 @@ function menu_draw()
 					local qi = 2
 					if (not onlinedlc) then
 						qi = 3
-					elseif asset.type[i] == "enemy" then
 						qi = 5
-					elseif asset.type[i] == "character" then
+					elseif asset.type == "character" then
 						qi = 6
-					elseif asset.type[i] == "video" then
+					elseif asset.type == "video" then
 						qi = 7
 					end
 					love.graphics.setColor(0, 0, 0, 150/255)
@@ -2160,27 +2159,23 @@ function menu_keypressed(key, unicode)
 					notice.new("Creator disabled the editor.", notice.white, 2)
 					return false
 				end
-				if not CurrentLanguage then
-					languagemenuopen = true
-					languagemenu_open()
-					return false
-				end
 				editormode = true
 				players = 1
 				playertype = "portal"
 				playertypei = 1
 				disablecheats()
 				loadeditormetadata()
-				game_load()
+				if mappackbackground and mappackbackground[mappackselection] then
+					local bg = mappackbackground[mappackselection]:split("-")
+					local bgsub = bg[2]:split("_")[2] or 0
+					game_load(tonubmer(bg[1]), tonubmer(bg[2]), bgsub)
+				else
+					game_load()
+				end
 			elseif selection == 3 then
 				gamestate = "mappackmenu"
 				mappacks()
 			elseif selection == 4 then
-				if not CurrentLanguage then
-					languagemenuopen = true
-					languagemenu_open()
-					return false
-				end
 				gamestate = "options"
 			end
 		elseif key == "escape" then
@@ -2308,11 +2303,7 @@ function menu_keypressed(key, unicode)
 			mappack = mappacklist[mappackselection]
 			--load background					
 	
-			if mappackbackground[mappackselection] then
-				loadbackground(mappackbackground[mappackselection] .. ".txt")
-			else
-				loadbackground("1-1.txt")
-			end
+			reset_background()
 			gamestate = "menu"
 			saveconfig()
 			if mappack == "custom_mappack" then
@@ -3054,17 +3045,38 @@ function keypromptstart()
 	end
 end
 
+function reset_background()
+	loadmappacks()
+	if mappacklistthread and mappacklistthread:isRunning() then
+		mappacklistthreadchannelin:push({"stop"})
+	end
+
+	if love.filesystem.getInfo( mappackfolder .. "/" .. mappacklist[mappackselection] .. "/settings.txt" ) then
+		local s = love.filesystem.read( mappackfolder .. "/" .. mappacklist[mappackselection] .. "/settings.txt" )
+		local s1 = s:split("\n")
+		for j = 1, #s1 do
+			local s2 = s1[j]:split("=")
+			if s2[1] == "background" then
+				mappackbackground[mappackselection] = s2[2]
+			elseif s2[1] == "dropshadow" then
+				mappackdropshadow[mappackselection] = true
+			end
+		end
+	end
+
+	if mappackbackground and mappackbackground[mappackselection] then
+		loadbackground(mappackbackground[mappackselection] .. ".txt")
+	else
+		loadbackground("1-1.txt")
+	end
+end
+
 function reset_mappacks()
 	delete_mappack("smb")
 	delete_mappack("portal")
 	delete_mappack("alesans_entities_mappack")
 
-	--[[local dlclist = love.filesystem.getDirectoryItems("onlinemappacks/")
-	for i = 1, #dlclist do
-		love.filesystem.remove("onlinemappacks/" .. dlclist[i])
-	end]]
-	
-	loadbackground("1-1.txt")
+	reset_background()
 	
 	playsound(oneupsound)
 end
@@ -3123,7 +3135,7 @@ function resetconfig()
 	shaders:set(1, nil)
 	shaders:set(2, nil)
 	saveconfig()
-	loadbackground("1-1.txt")
+	reset_background()
 end
 
 function selectworld()

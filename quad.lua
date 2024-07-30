@@ -1,29 +1,32 @@
 quad = class:new()
-
---I ADDED EVERY TILE PROPERTY FROM SE BONUS POINTS FOR ME!
-
---COLLIDE?
---INVISIBLE?
---BREAKABLE?
---COINBLOCK?
---COIN?
---_NOT_ PORTALABLE?
---JUMP_THROUGH?
---SPIKES_UP?
---SPIKES_DOWN?
---SPIKES_LEFT?
---SPIKES_RIGHT?
---GRATE?
---WATERTILE?
---MIRROR?
---FOREGROUND?
---BRIDGE?
---LAVA?
---LEFT_SLANT?
---RIGHT_SLANT?
---NOTE_BLOCK?
---VINE?
---ICE?
+quadproplist = {
+	"collision",
+	"invisible",
+	"breakable",
+	"coinblock",
+	"coin",
+	"portalable",
+	"platform",
+	"spikesup",
+	"spikesdown",
+	"spikesleft",
+	"spikesright",
+	"grate",
+	"water",
+	"mirror",
+	"foreground",
+	"bridge",
+	"lava",
+	"leftslant",
+	"rightslant",
+	"noteblock",
+	"vine",
+	"ice",
+	"fence",
+	"platformdown",
+	"platformleft",
+	"platformright"
+}
 
 function quad:init(img, imgdata, x, y, width, height)
 	--get if empty?
@@ -243,34 +246,8 @@ function getquadprops(imgdata, x, y, self)
 end
 
 local function getquadprops(self)
-	local list = {"collision",
-	"invisible",
-	"breakable",
-	"coinblock",
-	"coin",
-	"portalable",
-	"platform",
-	"spikesup",
-	"spikesdown",
-	"spikesleft",
-	"spikesright",
-	"grate",
-	"water",
-	"mirror",
-	"foreground",
-	"bridge",
-	"lava",
-	"leftslant",
-	"rightslant",
-	"noteblock",
-	"vine",
-	"ice",
-	"fence",
-	"platformdown",
-	"platformleft",
-	"platformright"}
 	local t = {}
-	for i, w in pairs(list) do
+	for i, w in pairs(quadproplist) do
 		t[w] = self[w]
 	end
 	return t
