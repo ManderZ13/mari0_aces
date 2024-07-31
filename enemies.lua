@@ -5,11 +5,11 @@ function enemies_load()
 	customenemies = {}
 
 	--HATS (for custom powerups)
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/hats/") then
-		local files = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/hats/")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/hats/") then
+		local files = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/hats/")
 		for i, v in pairs(files) do
 			if string.sub(v, -5, -1) == ".json" then
-				loadhat(mappackfolder .. "/" .. mappack .. "/hats/" .. v, mappackfolder .. "/" .. mappack)
+				loadhat("mappacks/" .. mappack .. "/hats/" .. v, "mappacks/" .. mappack)
 			end
 		end
 	end
@@ -17,7 +17,7 @@ function enemies_load()
 	--ENEMIIIIEEES
 	loaddelayed = {}
 	
-	local enemiesexist = love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/enemies/")
+	local enemiesexist = love.filesystem.getInfo("mappacks/" .. mappack .. "/enemies/")
 	if (not enemiesexist) and (not editormode) then
 		for i = 1, #mariocharacter do
 			if mariocharacter[i] and love.filesystem.getInfo("characters/" .. mariocharacter[i] .. "/enemies/") then
@@ -30,7 +30,7 @@ function enemies_load()
 	if enemiesexist then --only load defaults if custom enemies are used
 		fl = love.filesystem.getDirectoryItems("customenemies/")
 	end
-	local fl2 = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/enemies/")
+	local fl2 = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/enemies/")
 	
 	local realfl = {}
 	
@@ -39,7 +39,7 @@ function enemies_load()
 	end
 	
 	for i = 1, #fl2 do
-		local mpepath = mappackfolder .. "/" .. mappack .. "/enemies/" .. fl2[i]
+		local mpepath = "mappacks/" .. mappack .. "/enemies/" .. fl2[i]
 		if love.filesystem.getInfo(mpepath, "directory") then
 			--load enemies from folder
 			local fl3 = love.filesystem.getDirectoryItems(mpepath)

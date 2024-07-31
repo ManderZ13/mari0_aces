@@ -178,7 +178,7 @@ function menu_update(dt)
 
 					mappacklistthreadn = mappacklistthreadn + 1
 					if mappacklistthreadn <= #mappacklist-1 then
-						mappacklistthreadchannelin:push({mappackfolder .. "/" .. mappacklist[mappacklistthreadn]})
+						mappacklistthreadchannelin:push({"mappacks/" .. mappacklist[mappacklistthreadn]})
 					else
 						mappacklistthreadchannelin:push({"stop"})
 					end
@@ -1663,7 +1663,7 @@ function loadbackground(background)
 	collectablescount = {0,0,0,0,0,0,0,0,0,0}
 	animationnumbers = {}
 	
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. background) then
+	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. background) then
 	
 		map = {}
 		mapwidth = width
@@ -1687,7 +1687,7 @@ function loadbackground(background)
 		portalgun = true
 		portalguni = 1
 	else
-		local s = love.filesystem.read( mappackfolder .. "/" .. mappack .. "/" .. background )
+		local s = love.filesystem.read( "mappacks/" .. mappack .. "/" .. background )
 		local s2 = s:split(";")
 		
 		--remove custom sprites
@@ -1700,7 +1700,7 @@ function loadbackground(background)
 		end
 		
 		--add custom tiles
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/tiles.png") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/tiles.png") then
 			loadtiles("custom")
 			customtiles = true
 		else
@@ -1714,8 +1714,8 @@ function loadbackground(background)
 		mapheight = 15
 		if s2[2] and s2[2]:sub(1,7) == "height=" then
 			mapheight = tonumber(s2[2]:sub(8,-1)) or 15
-		elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/heights/1-1_0.txt") then
-			local s11 = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. mariosublevel .. ".txt")
+		elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/heights/1-1_0.txt") then
+			local s11 = love.filesystem.read("mappacks/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. mariosublevel .. ".txt")
 			mapheight = tonumber(s11)
 		end
 		
@@ -1897,7 +1897,7 @@ end
 
 function loadmappacks()
 	mappacktype = "local"
-	mappacklist = love.filesystem.getDirectoryItems( mappackfolder )
+	mappacklist = love.filesystem.getDirectoryItems("mappacks")
 
 	if onlinedlc then
 		mountalldlc()
@@ -1906,8 +1906,8 @@ function loadmappacks()
 	local delete = {}
 	for i = 1, #mappacklist do
 		if ((not onlinedlc) and (love.filesystem.getInfo("onlinemappacks/" .. mappacklist[i] .. ".zip")
-		or love.filesystem.getInfo(mappackfolder .. "/" .. mappacklist[i] .. "/version.txt")))
-		or not love.filesystem.getInfo(mappackfolder .. "/" .. mappacklist[i] .. "/settings.txt") then
+		or love.filesystem.getInfo("mappacks/" .. mappacklist[i] .. "/version.txt")))
+		or not love.filesystem.getInfo("mappacks/" .. mappacklist[i] .. "/settings.txt") then
 			table.insert(delete, i)
 		end
 	end
@@ -1957,7 +1957,7 @@ function loadmappacks()
 	mappacklistthreadchannelin = love.thread.getChannel("mappackin")
 	mappacklistthreadchannelout = love.thread.getChannel("mappackout")
 	mappacklistthread = love.thread.newThread("mappacklistthread.lua")
-	mappacklistthreadchannelin:push({mappackfolder .. "/" .. mappacklist[mappacklistthreadn], love.filesystem.getIdentity()})
+	mappacklistthreadchannelin:push({"mappacks/" .. mappacklist[mappacklistthreadn], love.filesystem.getIdentity()})
 	mappacklistthread:start()
 	
 	mappackscroll = 0
@@ -2055,11 +2055,11 @@ function loadonlinemappacks()
 		--mount dlc zip files
 		mountalldlc()
 
-		local mappacks = love.filesystem.getDirectoryItems( mappackfolder )
+		local mappacks = love.filesystem.getDirectoryItems("mappacks")
 		
 		local delete = {}
 		for i = 1, #mappacks do
-			if (not (love.filesystem.getInfo("onlinemappacks/" .. mappacks[i] .. ".zip") or love.filesystem.getInfo(mappackfolder .. "/" .. mappacks[i] .. "/version.txt"))) or not love.filesystem.getInfo( mappackfolder .. "/" .. mappacks[i] .. "/settings.txt") then
+			if (not (love.filesystem.getInfo("onlinemappacks/" .. mappacks[i] .. ".zip") or love.filesystem.getInfo("mappacks/" .. mappacks[i] .. "/version.txt"))) or not love.filesystem.getInfo( "mappacks/" .. mappacks[i] .. "/settings.txt") then
 				table.insert(delete, i)
 			end
 		end
@@ -2079,12 +2079,12 @@ function loadonlinemappacks()
 			local asset = {}
 			onlineassetlist[i] = asset
 
-			if love.filesystem.getInfo( mappackfolder .. "/" .. mappacks[i] .. "/icon.png" ) then
-				asset.icon = love.graphics.newImage(mappackfolder .. "/" .. mappacks[i] .. "/icon.png")
+			if love.filesystem.getInfo( "mappacks/" .. mappacks[i] .. "/icon.png" ) then
+				asset.icon = love.graphics.newImage("mappacks/" .. mappacks[i] .. "/icon.png")
 			end
 
-			if love.filesystem.getInfo( mappackfolder .. "/" .. mappacks[i] .. "/settings.txt" ) then
-				local s = love.filesystem.read( mappackfolder .. "/" .. mappacks[i] .. "/settings.txt" )
+			if love.filesystem.getInfo( "mappacks/" .. mappacks[i] .. "/settings.txt" ) then
+				local s = love.filesystem.read( "mappacks/" .. mappacks[i] .. "/settings.txt" )
 				local s1 = s:split("\n")
 				for j = 1, #s1 do
 					local s2 = s1[j]:split("=")
@@ -2139,7 +2139,7 @@ function firstreachedworld(from, to)
 			world = i
 			local reachedlevels = reachedworlds[mappack][i]
 			for j = 1, #mappacklevels[i] do
-				if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") and reachedlevels[j] then
+				if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") and reachedlevels[j] then
 					level = j
 					return {world, level}
 				end
@@ -2387,7 +2387,7 @@ function menu_keypressed(key, unicode)
 			end
 			mappacks()
 		elseif key == "m" then
-			if not openSaveFolder( mappackfolder ) then
+			if not openSaveFolder("mappacks") then
 				savefolderfailed = true
 			end
 		end
@@ -3088,8 +3088,8 @@ function reset_background()
 		mappacklistthreadchannelin:push({"stop"})
 	end
 
-	if love.filesystem.getInfo( mappackfolder .. "/" .. mappacklist[mappackselection] .. "/settings.txt" ) then
-		local s = love.filesystem.read( mappackfolder .. "/" .. mappacklist[mappackselection] .. "/settings.txt" )
+	if love.filesystem.getInfo( "mappacks/" .. mappacklist[mappackselection] .. "/settings.txt" ) then
+		local s = love.filesystem.read( "mappacks/" .. mappacklist[mappackselection] .. "/settings.txt" )
 		local s1 = s:split("\n")
 		for j = 1, #s1 do
 			local s2 = s1[j]:split("=")
@@ -3119,46 +3119,46 @@ function reset_mappacks()
 end
 
 function delete_mappack(pack)
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. pack .. "/") then
+	if not love.filesystem.getInfo("mappacks/" .. pack .. "/") then
 		return false
 	end
 	
-	local list = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. pack .. "/")
+	local list = love.filesystem.getDirectoryItems("mappacks/" .. pack .. "/")
 	for i = 1, #list do
-		love.filesystem.remove(mappackfolder .. "/" .. pack .. "/" .. list[i])
+		love.filesystem.remove("mappacks/" .. pack .. "/" .. list[i])
 	end
-	local list2 = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. pack .. "/heights")
+	local list2 = love.filesystem.getDirectoryItems("mappacks/" .. pack .. "/heights")
 	for i = 1, #list2 do
-		love.filesystem.remove(mappackfolder .. "/" .. pack .. "/heights/" .. list2[i])
+		love.filesystem.remove("mappacks/" .. pack .. "/heights/" .. list2[i])
 	end
 	
-	love.filesystem.remove(mappackfolder .. "/" .. pack .. "/")
+	love.filesystem.remove("mappacks/" .. pack .. "/")
 end
 
 function createmappack()
 	local i = 1
-	while love.filesystem.getInfo( mappackfolder .. "/custom_mappack_" .. i .. "/") do
+	while love.filesystem.getInfo( "mappacks/custom_mappack_" .. i .. "/") do
 		i = i + 1
 	end
 	
 	mappack = "custom_mappack_" .. i
 	
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/")
 	
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/custom/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/sounds/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/animated/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/enemies/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/music/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/backgrounds/")
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/animations/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/custom/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/sounds/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/animated/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/enemies/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/music/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/backgrounds/")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/animations/")
 	
 	local s = ""
 	s = s .. "name=new mappack" .. "\n"
 	s = s .. "author=you" .. "\n"
 	s = s .. "description=the newest best  mappack?" .. "\n"
 	
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/settings.txt", s)
+	love.filesystem.write("mappacks/" .. mappack .. "/settings.txt", s)
 end
 
 function resetconfig()
@@ -3220,7 +3220,7 @@ function selectworld()
 	selectworldexists = {}
 	for i = 1, #mappacklevels do
 		for j = 1, #mappacklevels[i] do
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") then
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. i .. "-" .. j .. ".txt") then
 				selectworldexists[i] = true
 			end
 		end

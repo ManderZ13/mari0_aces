@@ -524,7 +524,7 @@ function animation:update(dt)
 						end
 					end
 					for i, m in pairs(custommusics) do
-						if m == mappackfolder .. "/" .. mappack .. "/" .. musicname then
+						if m == "mappacks/" .. mappack .. "/" .. musicname then
 							musicname = m
 							musici = 7
 							custommusic = musicname

@@ -318,7 +318,7 @@ function love.load()
 		mountalldlc()
 	end
 	
-	if checkmappack and love.filesystem.getInfo(mappackfolder .. "/" .. checkmappack .. "/") then
+	if checkmappack and love.filesystem.getInfo("mappacks/" .. checkmappack .. "/") then
 		mappack = checkmappack
 		checkmappack = nil
 		saveconfig()
@@ -1419,7 +1419,7 @@ function loadconfig(nodefaultconfig)
 		elseif s2[1] == "mouseowner" then
 			mouseowner = tonumber(s2[2])
 		elseif s2[1] == "mappack" then
-			if love.filesystem.getInfo(mappackfolder .. "/" .. s2[2] .. "/") then
+			if love.filesystem.getInfo("mappacks/" .. s2[2] .. "/") then
 				mappack = s2[2]
 			else
 				checkmappack = s2[2]
@@ -1564,7 +1564,6 @@ function defaultconfig()
 	volume = 1
 	mappack = "smb"
 	vsync = false
-	mappackfolder = "mappacks"
 	fourbythree = false
 	localnick = false
 	
@@ -1618,7 +1617,6 @@ function suspendgame()
 	st.animationnumbers = animationnumbers
 	
 	st.mappack = mappack
-	st.mappackfolder = mappackfolder
 
 	local s = JSON:encode_pretty(st)
 	love.filesystem.write("suspend", s)
@@ -1668,7 +1666,6 @@ function continuegame()
 		marioproperties[i].customcolors = customcolors
 	end
 	mappack = st.mappack
-	mappackfolder = st.mappackfolder
 	
 	if (not st.collectables) then	--save the game if collectables are involved
 		love.filesystem.remove("suspend")

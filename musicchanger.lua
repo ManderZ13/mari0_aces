@@ -34,7 +34,7 @@ function musicchanger:init(x, y, r, music)
 			end
 		end
 	else
-		self.music = mappackfolder .. "/" .. mappack .. "/" .. self.m
+		self.music = "mappacks/" .. mappack .. "/" .. self.m
 	end
 	self.visible = ((vars[3] or "true") == "true")
 	self.on = false

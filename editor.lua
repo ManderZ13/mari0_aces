@@ -435,8 +435,8 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	local mappackname = ""
 	local mappackauthor = ""
 	local mappackdescription = ""
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/settings.txt") then
-		local data = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/settings.txt")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/settings.txt") then
+		local data = love.filesystem.read("mappacks/" .. mappack .. "/settings.txt")
 		local split1 = data:split("\n")
 		for i = 1, #split1 do
 			local split2 = split1[i]:split("=")
@@ -449,8 +449,8 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 			end
 		end
 	end
-	if love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/icon.png" ) then
-		editmappackicon = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/icon.png")
+	if love.filesystem.getInfo( "mappacks/" .. mappack .. "/icon.png" ) then
+		editmappackicon = love.graphics.newImage("mappacks/" .. mappack .. "/icon.png")
 	else
 		editmappackicon = nil
 	end
@@ -492,8 +492,8 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	end
 	
 	if PersistentEditorTools then
-		if PersistentEditorToolsLocal and (not editorsavedata) and love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/editorsave.json") then
-			local data = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/editorsave.json")
+		if PersistentEditorToolsLocal and (not editorsavedata) and love.filesystem.getInfo("mappacks/" .. mappack .. "/editorsave.json") then
+			local data = love.filesystem.read("mappacks/" .. mappack .. "/editorsave.json")
 			editorsavedata = JSON:decode(data)
 		end
 		if editorsavedata then
@@ -3646,12 +3646,12 @@ function texttabtab(t)
 		guielements["editlevelscreentext"].active = true
 		--levelscreenimage
 		if levelscreenimagecheck ~= mappack .. "-" .. marioworld .. "-" .. mariolevel then
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png") then
-				levelscreenimage = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
-			elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "levelscreen.png") then
-				levelscreenimage = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "levelscreen.png")
-			elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/levelscreen.png") then
-				levelscreenimage = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/levelscreen.png")
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png") then
+				levelscreenimage = love.graphics.newImage("mappacks/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
+			elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. marioworld .. "levelscreen.png") then
+				levelscreenimage = love.graphics.newImage("mappacks/" .. mappack .. "/" .. marioworld .. "levelscreen.png")
+			elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/levelscreen.png") then
+				levelscreenimage = love.graphics.newImage("mappacks/" .. mappack .. "/levelscreen.png")
 			else
 				levelscreenimage = false
 			end
@@ -3790,7 +3790,7 @@ function createeditorsavedata(t) -- "testing", "menu", "changelevel"
 	editorsavedata["editorstate"] = editorstate
 	if PersistentEditorToolsLocal then
 		local data = JSON:encode_pretty(editorsavedata)
-		love.filesystem.write(mappackfolder .. "/" .. mappack .. "/editorsave.json", data)
+		love.filesystem.write("mappacks/" .. mappack .. "/editorsave.json", data)
 	end
 end
 
@@ -3832,16 +3832,16 @@ function createnewanimation(name,dont_generate_gui)
 	
 	if not name then
 		local i = 1
-		while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/animations/animation" .. i .. ".json") do
+		while love.filesystem.getInfo("mappacks/" .. mappack .. "/animations/animation" .. i .. ".json") do
 			i = i + 1
 		end
 		name = "animation" .. i
 	end
 
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/animations/")
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animations/" .. name .. ".json", JSON:encode_pretty(s))
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/animations/")
+	love.filesystem.write("mappacks/" .. mappack .. "/animations/" .. name .. ".json", JSON:encode_pretty(s))
 	
-	table.insert(animations, animation:new(mappackfolder .. "/" .. mappack .. "/animations/" .. name .. ".json", name .. ".json"))
+	table.insert(animations, animation:new("mappacks/" .. mappack .. "/animations/" .. name .. ".json", name .. ".json"))
 	
 	currentanimation = #animations
 	if not dont_generate_gui then
@@ -3946,10 +3946,10 @@ function saveanimation()
 	
 	local json = JSON:encode_pretty(out)
 	if animationsaveas then
-		love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animations/" .. animationsaveas .. ".json", json)
+		love.filesystem.write("mappacks/" .. mappack .. "/animations/" .. animationsaveas .. ".json", json)
 		love.filesystem.remove(animations[currentanimation].filepath)
 		table.remove(animations, currentanimation)
-		table.insert(animations, animation:new(mappackfolder .. "/" .. mappack .. "/animations/" .. animationsaveas .. ".json", animationsaveas .. ".json"))
+		table.insert(animations, animation:new("mappacks/" .. mappack .. "/animations/" .. animationsaveas .. ".json", animationsaveas .. ".json"))
 		updateanimationdropdown()
 		currentanimation = #animations
 		guielements["animationselectdrop"].var = #animations
@@ -4703,7 +4703,7 @@ function createlevelbuttons(i)
 				s = s .. "_" .. k
 			end
 			s = s .. ".txt"
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. s) then
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. s) then
 				existingmaps[i][j][k] = true
 				guielements[name].textcolor = {1, 1, 1}
 				if meta_data and meta_data[i .. "~" .. j .. "~" .. k] then
@@ -5199,13 +5199,13 @@ function editor_mousepressed(x, y, button)
 							resettileselection()
 						else
 							if mtbutton == 1 then
-								moveline(mappackfolder .. "/" .. mappack .. "/objects.txt",tile+1,"up")
+								moveline("mappacks/" .. mappack .. "/objects.txt",tile+1,"up")
 								loadmtobjects()
 							elseif mtbutton == 2 then
-								moveline(mappackfolder .. "/" .. mappack .. "/objects.txt",tile+1,"down")
+								moveline("mappacks/" .. mappack .. "/objects.txt",tile+1,"down")
 								loadmtobjects()
 							elseif mtbutton == 3 then
-								deleteline(mappackfolder .. "/" .. mappack .. "/objects.txt", tile+1)
+								deleteline("mappacks/" .. mappack .. "/objects.txt", tile+1)
 								loadmtobjects()
 							end
 						end
@@ -6905,7 +6905,7 @@ function editor_filedropped(file)
 			if mousex > 151*scale and mousey > 146*scale and mousex < 203*scale and mousey < 198*scale then
 				local r, d = pcall(love.image.newImageData, file)
 				if r then
-					d:encode("png", mappackfolder .. "/" .. mappack .. "/icon.png")
+					d:encode("png", "mappacks/" .. mappack .. "/icon.png")
 					editmappackicon = love.graphics.newImage(file)
 				end
 			end
@@ -6976,8 +6976,8 @@ function loadmtobjects()
 	multitileobjects = {}
 	multitileobjectnames = nil
 	multitileobjectnames = {}
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/objects.txt") then
-		local data = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/objects.txt")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/objects.txt") then
+		local data = love.filesystem.read("mappacks/" .. mappack .. "/objects.txt")
 		if #data > 0 then
 			data = string.sub(data, 1, -2)
 			local split1 = data:split("\n")
@@ -7399,51 +7399,51 @@ function changecurrentenemy(var, initial)
 end
 function exportcustomimage(arg)
 	if customtabstate == "graphics" then
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/custom") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/custom")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/custom") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/custom")
 		end
-		love.filesystem.write(mappackfolder .. "/" .. mappack .. "/custom/" .. currentcustomimage[3], love.filesystem.read("graphics/" .. graphicspack .. "/" .. currentcustomimage[3]))
+		love.filesystem.write("mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3], love.filesystem.read("graphics/" .. graphicspack .. "/" .. currentcustomimage[3]))
 	elseif customtabstate == "tiles" then
 		if arg == "animated" then
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/animated/1.png") then
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animated/template.png", love.filesystem.read("graphics/templates/animated/1.png"))
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animated/template.txt", love.filesystem.read("graphics/templates/animated/1.txt"))
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/animated/1.png") then
+				love.filesystem.write("mappacks/" .. mappack .. "/animated/template.png", love.filesystem.read("graphics/templates/animated/1.png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/animated/template.txt", love.filesystem.read("graphics/templates/animated/1.txt"))
 			else
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animated/1.png", love.filesystem.read("graphics/templates/animated/1.png"))
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/animated/1.txt", love.filesystem.read("graphics/templates/animated/1.txt"))
+				love.filesystem.write("mappacks/" .. mappack .. "/animated/1.png", love.filesystem.read("graphics/templates/animated/1.png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/animated/1.txt", love.filesystem.read("graphics/templates/animated/1.txt"))
 			end
 		else
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/tiles.png") then
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/tilestemplate.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/tiles.png") then
+				love.filesystem.write("mappacks/" .. mappack .. "/tilestemplate.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
 			else
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/tiles.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/tiles.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
 			end
 		end
 	elseif customtabstate == "sounds" then
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/sounds") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/sounds")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/sounds") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/sounds")
 		end
-		love.filesystem.write(mappackfolder .. "/" .. mappack .. "/sounds/" .. currentcustomsound[3], love.filesystem.read("sounds/" .. currentcustomsound[3]))
+		love.filesystem.write("mappacks/" .. mappack .. "/sounds/" .. currentcustomsound[3], love.filesystem.read("sounds/" .. currentcustomsound[3]))
 	elseif customtabstate == "enemies" then
 		local enemy = currentcustomenemy[2]
 		if not enemy then
 			enemy = "goomba"
 		end
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/enemies") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/enemies")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/enemies") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/enemies")
 		end
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".json") then
-			love.filesystem.write(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".json", love.filesystem.read(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".json"))
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".png") then
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".png", love.filesystem.read(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".png"))
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".json") then
+			love.filesystem.write("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".json", love.filesystem.read("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".json"))
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".png") then
+				love.filesystem.write("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".png", love.filesystem.read("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".png"))
 			end
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".ogg") then
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".ogg", love.filesystem.read(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".ogg"))
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".ogg") then
+				love.filesystem.write("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".ogg", love.filesystem.read("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".ogg"))
 			end
 		elseif love.filesystem.getInfo("customenemies/" .. enemy .. ".json") then
-			love.filesystem.write(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".json", love.filesystem.read("customenemies/" .. enemy .. ".json"))
+			love.filesystem.write("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".json", love.filesystem.read("customenemies/" .. enemy .. ".json"))
 			if love.filesystem.getInfo("customenemies/" .. enemy .. ".png") then
-				love.filesystem.write(mappackfolder .. "/" .. mappack .. "/enemies/" .. enemy .. ".png", love.filesystem.read("customenemies/" .. enemy .. ".png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/enemies/" .. enemy .. ".png", love.filesystem.read("customenemies/" .. enemy .. ".png"))
 			end
 		end
 	end
@@ -7454,41 +7454,41 @@ function opencustomimagefolder(f)
 		return false
 	end
 	if customtabstate == "graphics" then
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/custom", "directory") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/custom")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/custom", "directory") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/custom")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/custom")
+		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/custom")
 	elseif customtabstate == "tiles" then
 		if f == "tiles" then
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack)
+			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack)
 		elseif f == "animated" then
-			if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/animated", "directory") then
-				love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/animated")
+			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/animated", "directory") then
+				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/animated")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/animated")
+			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/animated")
 		end
 	elseif customtabstate == "backgrounds" then
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/backgrounds", "directory") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/backgrounds")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/backgrounds", "directory") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/backgrounds")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/backgrounds")
+		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/backgrounds")
 	elseif customtabstate == "sounds" then
 		if f == "sounds" then
-			if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/sounds", "directory") then
-				love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/sounds")
+			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/sounds", "directory") then
+				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/sounds")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/sounds")
+			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/sounds")
 		else
-			if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/music", "directory") then
-				love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/music")
+			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/music", "directory") then
+				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/music")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/music")
+			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/music")
 		end
 	elseif customtabstate == "enemies" then
-		if not love.filesystem.getInfo( mappackfolder .. "/" .. mappack .. "/enemies", "directory") then
-			love.filesystem.createDirectory( mappackfolder .. "/" .. mappack .. "/enemies")
+		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/enemies", "directory") then
+			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/enemies")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. mappackfolder .. "/" .. mappack .. "/enemies")
+		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/enemies")
 	end
 end
 function savecustomimage()
@@ -7501,7 +7501,7 @@ function savecustomimage()
 		collectgarbage()
 		notice.new("Updated sprites", notice.white, 2)
 	elseif customtabstate == "tiles" then
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/tiles.png") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/tiles.png") then
 			--remove custom sprites
 			for i = smbtilecount+portaltilecount+1, #tilequads do
 				tilequads[i] = nil
@@ -7529,7 +7529,7 @@ function savecustomimage()
 			customtilecount = 0
 			notice.new("No tiles found!", notice.red, 2)
 		end
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/animated/1.png") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/animated/1.png") then
 			loadanimatedtiles()
 			notice.new("Updated animated tiles", notice.white, 2)
 		end
@@ -7548,17 +7548,17 @@ function savecustomimage()
 	end
 end
 function resetcustomimage()
-	love.filesystem.remove(mappackfolder .. "/" .. mappack .. "/custom/" .. currentcustomimage[3])
+	love.filesystem.remove("mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3])
 	_G[currentcustomimage[2]] = love.graphics.newImage("graphics/" .. graphicspack .. "/" .. currentcustomimage[3])
 end
 function replacecustomimage(file)
 	local r, d = pcall(love.image.newImageData, file)
 	if r then
 		if customtabstate == "graphics" then
-			d:encode("png", mappackfolder .. "/" .. mappack .. "/custom/" .. currentcustomimage[3])
+			d:encode("png", "mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3])
 			_G[currentcustomimage[2]] = love.graphics.newImage(file)
 		elseif customtabstate == "tiles" then
-			d:encode("png", mappackfolder .. "/" .. mappack .. "/tiles.png")
+			d:encode("png", "mappacks/" .. mappack .. "/tiles.png")
 			savecustomimage()
 		elseif customtabstate == "backgrounds" then
 			local levelstring = marioworld .. "-" .. mariolevel
@@ -7566,14 +7566,14 @@ function replacecustomimage(file)
 				levelstring = levelstring .. "_" .. mariosublevel
 			end
 			if editorbackgroundstate == "foreground" then
-				d:encode("png", mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "foreground1.png")
+				d:encode("png", "mappacks/" .. mappack .. "/" .. levelstring .. "foreground1.png")
 			else
-				d:encode("png", mappackfolder .. "/" .. mappack .. "/" .. levelstring .. "background1.png")
+				d:encode("png", "mappacks/" .. mappack .. "/" .. levelstring .. "background1.png")
 			end
 		elseif customtabstate == "text" and textstate == "levelscreen" then
-			d:encode("png", mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png") then
-				levelscreenimage = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
+			d:encode("png", "mappacks/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png") then
+				levelscreenimage = love.graphics.newImage("mappacks/" .. mappack .. "/" .. marioworld .. "-" .. mariolevel .. "levelscreen.png")
 			else
 				levelscreenimage = false
 			end
@@ -7752,10 +7752,9 @@ function savesettings()
 		s = s .. "nolowtime=t\n"
 	end
 	
-	love.filesystem.createDirectory( mappackfolder )
-	love.filesystem.createDirectory( mappackfolder .. "/" .. mappack )
-	
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/settings.txt", s)
+	love.filesystem.createDirectory("mappacks")
+	love.filesystem.createDirectory("mappacks/" .. mappack )
+	love.filesystem.write("mappacks/" .. mappack .. "/settings.txt", s)
 	
 	notice.new("Settings saved", notice.white, 3)
 end
@@ -7763,8 +7762,8 @@ end
 function savemtobject(objecttable, name)
 	-- 1 read objects file
 	local data, data2, datalines, objectname
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/objects.txt") then
-		data = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/objects.txt")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/objects.txt") then
+		data = love.filesystem.read("mappacks/" .. mappack .. "/objects.txt")
 	else
 		data = ""
 	end
@@ -7805,18 +7804,18 @@ function savemtobject(objecttable, name)
 	data = string.sub(data, 1, -2)
 	data = string.gsub(data, "mtobjsize", m .. " * " .. n)
 	data = data .. "\n"
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/objects.txt", data)
+	love.filesystem.write("mappacks/" .. mappack .. "/objects.txt", data)
 	mtjustsaved = true
 end
 
 function changemtname(linenumber)
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/objects.txt") then
+	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/objects.txt") then
 		return false
 	end
 	
 	line = tonumber(linenumber)
 	local data, newdata, split1
-	data = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/objects.txt")
+	data = love.filesystem.read("mappacks/" .. mappack .. "/objects.txt")
 	data = string.sub(data, 1, -2)
 	newdata = ""
 	split1 = data:split("\n")
@@ -7830,7 +7829,7 @@ function changemtname(linenumber)
 			newdata = newdata .. multitileobjectnames[line] .. "=" .. s2[2] .. "\n"
 		end
 	end
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/objects.txt", newdata)
+	love.filesystem.write("mappacks/" .. mappack .. "/objects.txt", newdata)
 end
 
 function moveline(file, line, direction)
@@ -8097,15 +8096,15 @@ function levelrightclickmenuclick(i)
 		filename = filename .. "_" .. levelrightclickmenu.level[3]
 	end
 	if i == 2 then --copy
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt") then
-			levelrightclickmenu.copy = love.filesystem.newFileData(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt")
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. filename .. ".txt") then
+			levelrightclickmenu.copy = love.filesystem.newFileData("mappacks/" .. mappack .. "/" .. filename .. ".txt")
 			notice.new("Level Copied", notice.white, 3)
 		else
 			notice.new("No level to copy", notice.red, 3)
 		end
 	elseif i == 3 then --paste
 		if levelrightclickmenu.copy then
-			love.filesystem.write(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt", levelrightclickmenu.copy)
+			love.filesystem.write("mappacks/" .. mappack .. "/" .. filename .. ".txt", levelrightclickmenu.copy)
 			levelrightclickmenu.copy = nil
 			collectgarbage()
 			notice.new("Level Pasted", notice.white, 3)
@@ -8113,20 +8112,20 @@ function levelrightclickmenuclick(i)
 			notice.new("No level copied", notice.red, 3)
 		end
 	elseif i == 4 then --delete
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt") then
-			local readd = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt")
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. filename .. ".txt") then
+			local readd = love.filesystem.read("mappacks/" .. mappack .. "/" .. filename .. ".txt")
 			if readd then
 				levelrightclickmenu.copy = readd
 				notice.new("Backup Copied", notice.white, 3)
-				love.filesystem.remove(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt")
+				love.filesystem.remove("mappacks/" .. mappack .. "/" .. filename .. ".txt")
 				--delete editormetadata
 				local levelstring = levelrightclickmenu.level[1] .. "~" .. levelrightclickmenu.level[2] .. "~" .. levelrightclickmenu.level[3]
-				love.filesystem.remove(mappackfolder .. "/" .. mappack .. "/editor/" .. levelstring .. ".png")
+				love.filesystem.remove("mappacks/" .. mappack .. "/editor/" .. levelstring .. ".png")
 				notice.new("Level Deleted", notice.red, 3)
 			end
 		end
 	end
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt") then
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. filename .. ".txt") then
 		existingmaps[levelrightclickmenu.level[1]][levelrightclickmenu.level[2]][levelrightclickmenu.level[3]] = true
 		levelrightclickmenu.button.textcolor = {1, 1, 1}
 	else
@@ -8228,9 +8227,9 @@ end
 function loadeditormetadata()
 	--save background colors for level buttons
 	meta_data = {}
-	local files = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/editor")
+	local files = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/editor")
 	for i = 1, #files do
-		local v = mappackfolder .. "/" .. mappack .. "/editor/" .. files[i]
+		local v = "mappacks/" .. mappack .. "/editor/" .. files[i]
 		local extension = string.sub(v, -4, -1)
 		if extension == ".png" then
 			local name = string.sub(files[i], 1, -5)
@@ -8239,10 +8238,10 @@ function loadeditormetadata()
 		end
 	end
 	--[[
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/editor.txt") then
+	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/editor.txt") then
 		return false
 	end
-	local s = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/editor.txt")
+	local s = love.filesystem.read("mappacks/" .. mappack .. "/editor.txt")
 	local s2 = s:split("|")
 	local s3
 	for leveldatai = 1, #s2 do
@@ -8256,7 +8255,7 @@ function saveeditormetadata()
 	if not meta_data then
 		return false
 	end
-	love.filesystem.createDirectory(mappackfolder .. "/" .. mappack .. "/editor")
+	love.filesystem.createDirectory("mappacks/" .. mappack .. "/editor")
 	local w, h = 14, 13
 	if mariosublevel == 0 then
 		w = 70
@@ -8277,7 +8276,7 @@ function saveeditormetadata()
 		end
 	end
 	local levelstring = marioworld .. "~" .. mariolevel .. "~" .. mariosublevel
-	imgdata:encode("png", mappackfolder .. "/" .. mappack .. "/editor/" .. levelstring .. ".png")
+	imgdata:encode("png", "mappacks/" .. mappack .. "/editor/" .. levelstring .. ".png")
 	if not meta_data[levelstring] then
 		meta_data[levelstring] = {}
 	end
@@ -8289,7 +8288,7 @@ function saveeditormetadata()
 		s = s .. i .. "~" .. t[1] .. "~" .. t[2] .. "~" .. t[3] .. "|"
 	end
 	s = s:sub(1, -2)
-	local success, message = love.filesystem.write(mappackfolder .. "/" .. mappack .. "/editor.txt", s)]]
+	local success, message = love.filesystem.write("mappacks/" .. mappack .. "/editor.txt", s)]]
 end
 
 function promptsaveeditormetadata()

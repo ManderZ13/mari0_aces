@@ -1,8 +1,8 @@
 function loadmappacksettings()
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/settings.txt") then
+	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/settings.txt") then
 		return false
 	end
-	local s = love.filesystem.read( mappackfolder .. "/" .. mappack .. "/settings.txt" )
+	local s = love.filesystem.read( "mappacks/" .. mappack .. "/settings.txt" )
 	local s1 = s:split("\n")
 	for j = 1, #s1 do
 		local s2 = s1[j]:split("=")
@@ -63,15 +63,15 @@ function updatemappacksettings()
 end
 
 function loadcustomtext()
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/endingmusic.ogg") then
-		endingmusic = love.audio.newSource(mappackfolder .. "/" .. mappack .. "/endingmusic.ogg", "stream");endingmusic:play();endingmusic:stop()
-	elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/endingmusic.mp3") then
-		endingmusic = love.audio.newSource(mappackfolder .. "/" .. mappack .. "/endingmusic.mp3", "stream");endingmusic:play();endingmusic:stop()
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/endingmusic.ogg") then
+		endingmusic = love.audio.newSource("mappacks/" .. mappack .. "/endingmusic.ogg", "stream");endingmusic:play();endingmusic:stop()
+	elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/endingmusic.mp3") then
+		endingmusic = love.audio.newSource("mappacks/" .. mappack .. "/endingmusic.mp3", "stream");endingmusic:play();endingmusic:stop()
 	else
 		endingmusic = konamisound
 	end
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/text.txt") then
-		local s = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/text.txt")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/text.txt") then
+		local s = love.filesystem.read("mappacks/" .. mappack .. "/text.txt")
 		
 		defaultcustomtext()
 		
@@ -228,7 +228,7 @@ function savecustomtext()
 	end
 	s = s:sub(1, -2)
 	
-	love.filesystem.write(mappackfolder .. "/" .. mappack .. "/text.txt", s)
+	love.filesystem.write("mappacks/" .. mappack .. "/text.txt", s)
 	loadcustomtext()
 	notice.new("Saved custom text!", notice.white, 2)
 end
@@ -255,15 +255,15 @@ function loadcustombackground(filename)
 	-- load background folder BG's
 	local realfl = {}
 	local realflnames = {}
-	local fl = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds/")
+	local fl = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds/")
 	for b = 1, #fl do
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b], "directory") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/backgrounds/" .. fl[b], "directory") then
 			-- load BG's from folder
-			local fl2 = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b])
+			local fl2 = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds/" .. fl[b])
 			for b2 = 1, #fl2 do
 				if string.sub(fl2[b2], -4) == ".png" then
 					local name = string.sub(fl2[b2],1,-5)
-					table.insert(realfl, mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b] .. "/" .. name)
+					table.insert(realfl, "mappacks/" .. mappack .. "/backgrounds/" .. fl[b] .. "/" .. name)
 					table.insert(realflnames, name)
 				end
 			end
@@ -271,7 +271,7 @@ function loadcustombackground(filename)
 			-- load normal BG's
 			if string.sub(fl[b], -4) == ".png" then
 				local name = string.sub(fl[b],1,-5)
-				table.insert(realfl, mappackfolder .. "/" .. mappack .. "/backgrounds/" .. name)
+				table.insert(realfl, "mappacks/" .. mappack .. "/backgrounds/" .. name)
 				table.insert(realflnames, name)
 			end
 		end
@@ -300,13 +300,13 @@ function loadcustombackground(filename)
 	end
 
 	-- loads BG from level
-	while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. i .. ".png") do
-		loadbg(i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname)
+	while love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. levelbgname .. i .. ".png") do
+		loadbg(i, "mappacks/" .. mappack .. "/" .. levelbgname .. i, "mappacks/" .. mappack .. "/" .. levelbgname)
 		i = i+1
 	end
 	if #custombackgroundimg == 0 then
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. ".png") then
-			loadbg(i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname)
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. levelbgname .. ".png") then
+			loadbg(i, "mappacks/" .. mappack .. "/" .. levelbgname)
 			return
 		end
 	end
@@ -329,8 +329,8 @@ function loadcustombackground(filename)
 
 	-- was no background loaded? Lets try a "global" background from the mappack folder
 	if #custombackgroundimg == 0 then
-		while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/background" .. i .. ".png") do
-			loadbg(i, mappackfolder .. "/" .. mappack .. "/background" .. i)
+		while love.filesystem.getInfo("mappacks/" .. mappack .. "/background" .. i .. ".png") do
+			loadbg(i, "mappacks/" .. mappack .. "/background" .. i)
 			i = i+1
 		end
 	end
@@ -362,15 +362,15 @@ function loadcustomforeground(filename)
 	-- load background folder BG's
 	local realfl = {}
 	local realflnames = {}
-	local fl = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds/")
+	local fl = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds/")
 	for b = 1, #fl do
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b], "directory") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/backgrounds/" .. fl[b], "directory") then
 			-- load BG's from folder
-			local fl2 = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b])
+			local fl2 = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds/" .. fl[b])
 			for b2 = 1, #fl2 do
 				if string.sub(fl2[b2], -4) == ".png" then
 					local name = string.sub(fl2[b2],1,-5)
-					table.insert(realfl, mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[b] .. "/" .. name)
+					table.insert(realfl, "mappacks/" .. mappack .. "/backgrounds/" .. fl[b] .. "/" .. name)
 					table.insert(realflnames, name)
 				end
 			end
@@ -378,7 +378,7 @@ function loadcustomforeground(filename)
 			-- load normal BG's
 			if string.sub(fl[b], -4) == ".png" then
 				local name = string.sub(fl[b],1,-5)
-				table.insert(realfl, mappackfolder .. "/" .. mappack .. "/backgrounds/" .. name)
+				table.insert(realfl, "mappacks/" .. mappack .. "/backgrounds/" .. name)
 				table.insert(realflnames, name)
 			end
 		end
@@ -403,13 +403,13 @@ function loadcustomforeground(filename)
 	end
 
 	-- loads BG from level
-	while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. i .. ".png") do
-		loadbg(i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname)
+	while love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. levelbgname .. i .. ".png") do
+		loadbg(i, "mappacks/" .. mappack .. "/" .. levelbgname .. i, "mappacks/" .. mappack .. "/" .. levelbgname)
 		i = i+1
 	end
 	if #customforegroundimg == 0 then
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. levelbgname .. ".png") then
-			loadbg(i, mappackfolder .. "/" .. mappack .. "/" .. levelbgname)
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. levelbgname .. ".png") then
+			loadbg(i, "mappacks/" .. mappack .. "/" .. levelbgname)
 			return
 		end
 	end
@@ -432,8 +432,8 @@ function loadcustomforeground(filename)
 
 	-- was no background loaded? Lets try a "global" background from the mappack folder
 	if #customforegroundimg == 0 then
-		while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/foreground" .. i .. ".png") do
-			loadbg(i, mappackfolder .. "/" .. mappack .. "/foreground" .. i)
+		while love.filesystem.getInfo("mappacks/" .. mappack .. "/foreground" .. i .. ".png") do
+			loadbg(i, "mappacks/" .. mappack .. "/foreground" .. i)
 			i = i+1
 		end
 	end
@@ -445,13 +445,13 @@ end
 
 function loadcustombackgrounds()
 	custombackgrounds = {"default"}
-	local fl = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds")
+	local fl = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds")
 	for i = 1, #fl do
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[i], "directory") then
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/backgrounds/" .. fl[i], "directory") then
 			-- load BG from folder
-			local fl2 = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[i])
+			local fl2 = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/backgrounds/" .. fl[i])
 			for i2 = 1, #fl2 do
-				local v = mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl2[i2]
+				local v = "mappacks/" .. mappack .. "/backgrounds/" .. fl2[i2]
 				local extension = string.sub(v, -4, -1)
 				local number = string.sub(v, -5, -5)
 				if extension == ".png" and (number == "1" or (not tonumber(number))) then
@@ -466,7 +466,7 @@ function loadcustombackgrounds()
 			end
 		else
 			-- load normal BG
-			local v = mappackfolder .. "/" .. mappack .. "/backgrounds/" .. fl[i]
+			local v = "mappacks/" .. mappack .. "/backgrounds/" .. fl[i]
 			local extension = string.sub(v, -4, -1)
 			local number = string.sub(v, -5, -5)
 			if extension == ".png" and (number == "1" or (not tonumber(number))) then
@@ -543,19 +543,19 @@ function loadanimatedtiles() --animated
 	animatedrgblist = {}
 	animatedtilesframe = {}
 			
-	local fl = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/animated")
+	local fl = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/animated")
 	animatedtilecount = 0
 	
 	local i = 1
-	while love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/animated/" .. i .. ".png") do
-		local v = mappackfolder .. "/" .. mappack .. "/animated/" .. i .. ".png"
+	while love.filesystem.getInfo("mappacks/" .. mappack .. "/animated/" .. i .. ".png") do
+		local v = "mappacks/" .. mappack .. "/animated/" .. i .. ".png"
 		if love.filesystem.getInfo(v) and string.sub(v, -4) == ".png" then
 			if love.filesystem.getInfo(string.sub(v, 1, -5) .. ".txt") then
 				animatedtilecount = animatedtilecount + 1
 				local t = animatedquad:new(v, love.filesystem.read(string.sub(v, 1, -5) .. ".txt"), animatedtilecount+90000)
 				tilequads[animatedtilecount+90000] = t
 				table.insert(animatedtiles, t)
-				local image = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/animated/" .. i .. ".png")
+				local image = love.image.newImageData("mappacks/" .. mappack .. "/animated/" .. i .. ".png")
 				animatedrgblist[animatedtilecount+90000] = {}
 				local tilewidth = 16
 				if image:getHeight() > 16 then --SE Tiles
@@ -573,11 +573,11 @@ function loadanimatedtiles() --animated
 end
 
 function loadcustomsounds()
-	local starmusicexists = love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/sounds/starmusic.ogg")
-	local starmusicfastexists = love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/sounds/starmusic-fast.ogg")
+	local starmusicexists = love.filesystem.getInfo("mappacks/" .. mappack .. "/sounds/starmusic.ogg")
+	local starmusicfastexists = love.filesystem.getInfo("mappacks/" .. mappack .. "/sounds/starmusic-fast.ogg")
 	if starmusicexists and starmusicfastexists then
-		music:preload(mappackfolder .. "/" .. mappack .. "/sounds/starmusic.ogg", "starmusic")
-		music:preload(mappackfolder .. "/" .. mappack .. "/sounds/starmusic-fast.ogg", "starmusic-fast")
+		music:preload("mappacks/" .. mappack .. "/sounds/starmusic.ogg", "starmusic")
+		music:preload("mappacks/" .. mappack .. "/sounds/starmusic-fast.ogg", "starmusic-fast")
 		customstarmusic = true
 	else
 		if starmusicexists then
@@ -591,8 +591,8 @@ function loadcustomsounds()
 		end
 		customstarmusic = false
 	end
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/sounds/princessmusic.ogg") then
-		music:preload(mappackfolder .. "/" .. mappack .. "/sounds/princessmusic.ogg", "princessmusic")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/sounds/princessmusic.ogg") then
+		music:preload("mappacks/" .. mappack .. "/sounds/princessmusic.ogg", "princessmusic")
 		customprincessmusic = true
 	else
 		if customprincessmusic then
@@ -601,14 +601,14 @@ function loadcustomsounds()
 		customprincessmusic = false
 	end
 	
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/sounds") or customsounds then
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/sounds") or customsounds then
 		for i, j in pairs(soundliststring) do
-			if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/sounds/" .. j .. ".ogg") then
+			if love.filesystem.getInfo("mappacks/" .. mappack .. "/sounds/" .. j .. ".ogg") then
 				local method = "static"
 				if j == "pbutton" or j == "megamushroom" or j == "glados1" then
 					method = "stream"
 				end
-				_G[j .. "sound"] = love.audio.newSource(mappackfolder .. "/" .. mappack .. "/sounds/" .. j .. ".ogg", method);_G[j .. "sound"]:setVolume(0);_G[j .. "sound"]:play();_G[j .. "sound"]:stop();_G[j .. "sound"]:setVolume(1)
+				_G[j .. "sound"] = love.audio.newSource("mappacks/" .. mappack .. "/sounds/" .. j .. ".ogg", method);_G[j .. "sound"]:setVolume(0);_G[j .. "sound"]:play();_G[j .. "sound"]:stop();_G[j .. "sound"]:setVolume(1)
 				if j == "scorering" or j == "raccoonplane" or j == "wind" or j == "pbutton" or j == "megamushroom" then
 					_G[j .. "sound"]:setLooping(true)
 				end
@@ -636,7 +636,7 @@ end
 
 function loadcustommusic()
 	custommusiclist = {}
-	local files = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/music")
+	local files = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/music")
 	for i, s in pairs(files) do
 		if s:sub(-4) == ".mp3" or s:sub(-4) == ".ogg" then
 			if not (s:sub(-9, -5) == "-fast" or s:sub(-10, -5) == "-intro") then
@@ -650,27 +650,27 @@ function loadcustommusic()
 	editormusictable = {"none", "overworld", "underground", "castle", "underwater", "star", "custom"}
 	for i = 0, 99 do
 		custommusics[i] = false
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/music" .. tostring(i) .. ".ogg") then
-			custommusics[i] = mappackfolder .. "/" .. mappack .. "/music" .. tostring(i) .. ".ogg"
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/music" .. tostring(i) .. ".ogg") then
+			custommusics[i] = "mappacks/" .. mappack .. "/music" .. tostring(i) .. ".ogg"
 			music:load(custommusics[i])
-		elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/music" .. tostring(i) .. ".mp3") then
-			custommusics[i] = mappackfolder .. "/" .. mappack .. "/music" .. tostring(i) .. ".mp3"
+		elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/music" .. tostring(i) .. ".mp3") then
+			custommusics[i] = "mappacks/" .. mappack .. "/music" .. tostring(i) .. ".mp3"
 			music:load(custommusics[i])
 		elseif i > 9 then
 			break --stop counting music if one is missing
 		end
 	end
 	for i, s in pairs(custommusiclist) do
-		custommusics[s] = mappackfolder .. "/" .. mappack .. "/" .. s
+		custommusics[s] = "mappacks/" .. mappack .. "/" .. s
 		music:load(custommusics[s])
 		table.insert(musictable, s)
 		table.insert(editormusictable, s:sub(7, -5):lower())
 	end
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/music.ogg") then
-		custommusics[1] = mappackfolder .. "/" .. mappack .. "/music.ogg"
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/music.ogg") then
+		custommusics[1] = "mappacks/" .. mappack .. "/music.ogg"
 		music:load(custommusics[1])
-	elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/music.mp3") then
-		custommusics[1] = mappackfolder .. "/" .. mappack .. "/music.mp3"
+	elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/music.mp3") then
+		custommusics[1] = "mappacks/" .. mappack .. "/music.mp3"
 		music:load(custommusics[1])
 	end
 end
@@ -681,7 +681,7 @@ function getmappacklevels()
 	minusworld = false
 	local worlds = defaultworlds
 	
-	local files = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack)
+	local files = love.filesystem.getDirectoryItems("mappacks/" .. mappack)
 	for i, s in pairs(files) do
 		local f1 = s:find("-")
 		if s:sub(-4) == ".txt" and f1 then --check if level file (false positives can't hurt though)

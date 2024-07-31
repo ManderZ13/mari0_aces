@@ -19,7 +19,7 @@ end
 ---@param filename string The filename of the mappack.
 ---@return boolean success Whether the mappack was mounted successfully.
 function mountmappack(filename)
-    return mountto("onlinemappacks/" .. filename, mappackfolder)
+    return mountto("onlinemappacks/" .. filename, "mappacks")
 end
 
 --- Mounts a character from the online repository.
@@ -61,7 +61,7 @@ end
 
 --- Mounts all downloaded assets from the online repository.
 function mountalldlc()
-    mountallfrom("onlinemappacks", mappackfolder, mountmappack)
+    mountallfrom("onlinemappacks", "mappacks", mountmappack)
     mountallfrom("characters", "characters", mountcharacter)
 end
 

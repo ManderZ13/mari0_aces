@@ -53,9 +53,9 @@ local loadedcustomsprites = {} --lists which graphics have been changed
 function loadcustomsprites(initial) --Sprite loader
 	local imgtable = imagestable
 	local imgdatatable = imagedatatable
-	local customspritesexist = love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom")
+	local customspritesexist = love.filesystem.getInfo("mappacks/" .. mappack .. "/custom")
 	if customspritesexist then
-		local files = love.filesystem.getDirectoryItems(mappackfolder .. "/" .. mappack .. "/custom")
+		local files = love.filesystem.getDirectoryItems("mappacks/" .. mappack .. "/custom")
 		if #files == 0 then
 			customspritesexist = false
 		end
@@ -126,8 +126,8 @@ function loadcustomsprites(initial) --Sprite loader
 	customsprites = true
 	
 	for i = 1, #imgtable do
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png") then
-			local imgdata = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/custom/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/custom/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png") then
+			local imgdata = love.image.newImageData("mappacks/" .. mappack .. "/custom/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
 			_G[imgtable[i]] = love.graphics.newImage(imgdata)
 			_G[imgdatatable[i]] = imgdata
 			loadedcustomsprites[imgtable[i]] = true
@@ -185,11 +185,11 @@ function loadcustomsprites(initial) --Sprite loader
 	--fix old custom graphics
 	fixsprites()
 	
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom/title.png") then
-		titleimage = love.graphics.newImage(mappackfolder .. "/" .. mappack .. "/custom/title.png")
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/custom/title.png") then
+		titleimage = love.graphics.newImage("mappacks/" .. mappack .. "/custom/title.png")
 		titlewidth = titleimage:getWidth()
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom/title.txt") then
-			local s = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/custom/title.txt")
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/custom/title.txt") then
+			local s = love.filesystem.read("mappacks/" .. mappack .. "/custom/title.txt")
 			local lines
 			if string.find(s, "\r\n") then
 				lines = s:split("\r\n")
@@ -1717,10 +1717,10 @@ function fixsprites(reset)
 	if (not reset) and fontimage:getWidth() == 512 and fontimage:getHeight() == 8 then
 		SPRITESfixfont = true
 		local d3, d4
-		local d1 = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/custom/font.png")
+		local d1 = love.image.newImageData("mappacks/" .. mappack .. "/custom/font.png")
 		local d2 = love.image.newImageData("graphics/" .. graphicspack .. "/font.png")
 		if loadedcustomsprites["fontbackimage"] then
-			d3 = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/custom/fontback.png")
+			d3 = love.image.newImageData("mappacks/" .. mappack .. "/custom/fontback.png")
 			d4 = love.image.newImageData("graphics/" .. graphicspack .. "/fontback.png")
 		end
 		local oldglyphs = "0123456789abcdefghijklmnopqrstuvwxyz.:/,\"©-_>* !{}?+'()=><#%  "
@@ -1755,7 +1755,7 @@ function fixsprites(reset)
 		SPRITESfixfont = false
 	end
 	
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom/smbtiles.png") and (not reset) then
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/custom/smbtiles.png") and (not reset) then
 		customsmbtiles = true
 		loadtiles("smbcustom")
 		collectgarbage()
@@ -1765,7 +1765,7 @@ function fixsprites(reset)
 		customsmbtiles = false
 	end
 
-	if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/custom/entities.png") and (not reset) then
+	if love.filesystem.getInfo("mappacks/" .. mappack .. "/custom/entities.png") and (not reset) then
 		loadtiles("entity")
 		customentityquads = true
 	elseif customentityquads then
@@ -1783,7 +1783,7 @@ function loadtiles(i, initial)
 		local secretstart = 7
 		local imgdata
 		if i == "smbcustom" then
-			imgdata = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/custom/smbtiles.png")
+			imgdata = love.image.newImageData("mappacks/" .. mappack .. "/custom/smbtiles.png")
 		else
 			imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/smbtiles.png")
 		end
@@ -1823,7 +1823,7 @@ function loadtiles(i, initial)
 		local height = math.floor(imgheight/17)
 		local imgdata
 		if i == "portalcustom" then
-			imgdata = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/custom/portaltiles.png")
+			imgdata = love.image.newImageData("mappacks/" .. mappack .. "/custom/portaltiles.png")
 		else
 			imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/portaltiles.png")
 		end
@@ -1861,7 +1861,7 @@ function loadtiles(i, initial)
 		--this is duplicated in game.lua and editor.lua because bad coding
 		--update: not anymore
 		local data = {}
-		data[1] = love.image.newImageData(mappackfolder .. "/" .. mappack .. "/tiles.png")
+		data[1] = love.image.newImageData("mappacks/" .. mappack .. "/tiles.png")
 		
 		customtilesimg = {}
 		
@@ -1879,8 +1879,8 @@ function loadtiles(i, initial)
 				y = y + newh
 
 				--debug, outputs files
-				--local filedata = data[n]:encode("png", mappackfolder .. "/" .. mappack .. "/" .. n .. ".png")
-				--love.filesystem.write(mappackfolder .. "/" .. mappack .. "/" .. n .. ".png", filedata)
+				--local filedata = data[n]:encode("png", "mappacks/" .. mappack .. "/" .. n .. ".png")
+				--love.filesystem.write("mappacks/" .. mappack .. "/" .. n .. ".png", filedata)
 			end
 		end
 

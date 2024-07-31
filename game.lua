@@ -110,7 +110,7 @@ function game_load(suspended, levelarg, subarg)
 	
 	--add custom tiles
 	local bla = love.timer.getTime()
-	if not dcplaying and love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/tiles.png") then
+	if not dcplaying and love.filesystem.getInfo("mappacks/" .. mappack .. "/tiles.png") then
 		loadtiles("custom")
 		customtiles = true
 	else
@@ -4363,7 +4363,7 @@ function startlevel(level, reason)
 	originalmapwidth = mapwidth
 	
 	if musici > 7 then
-		custommusic = mappackfolder .. "/" .. mappack .. "/" .. musictable[musici]
+		custommusic = "mappacks/" .. mappack .. "/" .. musictable[musici]
 	else
 		custommusic = custommusics[custommusici]
 	end
@@ -4628,7 +4628,7 @@ function startlevel(level, reason)
 	end
 
 	--is it toad or no
-	showtoad = not (tonumber(marioworld) and marioworld >= 8 and not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. marioworld+1 .. "-1.txt"))
+	showtoad = not (tonumber(marioworld) and marioworld >= 8 and not love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. marioworld+1 .. "-1.txt"))
 	
 	updatespritebatch()
 
@@ -4637,19 +4637,19 @@ function startlevel(level, reason)
 end
 
 function loadmap(filename)
-	print("Loading " .. mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt")
+	print("Loading " .. "mappacks/" .. mappack .. "/" .. filename .. ".txt")
 	
-	if not love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt") then
-		print(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt not found!")
+	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. filename .. ".txt") then
+		print("mappacks/" .. mappack .. "/" .. filename .. ".txt not found!")
 		return false
 	end
-	local s = love.filesystem.read( mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt" )
+	local s = love.filesystem.read( "mappacks/" .. mappack .. "/" .. filename .. ".txt" )
 	local s2 = s:split(";")
 	
 	if s2[2] and s2[2]:sub(1,7) == "height=" then
 		mapheight = tonumber(s2[2]:sub(8,-1)) or 15
-	elseif love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") then
-		local s11 = love.filesystem.read(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt")
+	elseif love.filesystem.getInfo("mappacks/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") then
+		local s11 = love.filesystem.read("mappacks/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt")
 		mapheight = tonumber(s11)
 	else
 		mapheight = 15
@@ -6286,19 +6286,19 @@ function savemap(filename)
 	
 	--tileset
 	
-	love.filesystem.createDirectory( mappackfolder )
-	love.filesystem.createDirectory( mappackfolder .. "/" .. mappack )
+	love.filesystem.createDirectory("mappacks")
+	love.filesystem.createDirectory("mappacks/" .. mappack)
 	
-	local success, message = love.filesystem.write(mappackfolder .. "/" .. mappack .. "/" .. filename .. ".txt", s)
+	local success, message = love.filesystem.write("mappacks/" .. mappack .. "/" .. filename .. ".txt", s)
 	
 	--don't create a map height file if it's 15 (default) (Update: no more map files cause they're bad)
 	if mapheight ~= 15 then
-		if love.filesystem.getInfo(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") then
-			love.filesystem.remove(mappackfolder .. "/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") --remove file
+		if love.filesystem.getInfo("mappacks/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") then
+			love.filesystem.remove("mappacks/" .. mappack .. "/heights/" .. marioworld .. "-" .. mariolevel .. "_" .. actualsublevel .. ".txt") --remove file
 		end
 	end
 	
-	print("Map saved as " .. mappackfolder .. "/" .. filename .. ".txt")
+	print("Map saved as " .. "mappacks/" .. filename .. ".txt")
 	if success then
 		notice.new(TEXT["Map saved!"], notice.white, 2)
 	else
