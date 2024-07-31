@@ -9116,9 +9116,22 @@ function mario:updateportalsavailable()
 	end
 end
 
+function mario:getcolorfromcolorable(color, fallback)
+	if color ~= nil and #color > 0 then
+		local i = tablecontainsistring(self.characterdata.colorables, color)
+		if i then return mariocolors[self.playernumber][i] end
+	end
+	return mariocolors[self.playernumber][fallback]
+end
+
 function mario:setbasecolors(color)
 	if self.character and self.characterdata then
 		if self.characterdata[color] then
+			for i, v in ipairs(self.characterdata[color]) do
+				if type(v) == "string" then
+					self.characterdata[color][i] = self:getcolorfromcolorable(v, i)
+				end
+			end
 			self.basecolors = self.characterdata[color]
 		else
 			self.basecolors = _G[color]

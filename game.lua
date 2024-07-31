@@ -3352,7 +3352,7 @@ function drawplayer(i, x, y, r, pad, drop)
 			local offsets = {0,0}
 			local drawhats = true
 			local char = v.character
-			if v.graphic == v.biggraphic or v.graphic == v.capegraphic or v.animationstate == "grow" or v.graphic == v.raccoongraphic or v.graphic == v.hammergraphic or v.graphic == v.froggraphic or v.graphic == v.tinygraphic or v.graphic == v.tanookigraphic or v.graphic == v.shellgraphic or v.graphic == v.boomeranggraphic then
+			if v.graphic == v.biggraphic or v.graphic == v.firegraphic or v.graphic == v.icegraphic or v.graphic == v.superballgraphic or v.graphic == v.capegraphic or v.animationstate == "grow" or v.graphic == v.raccoongraphic or v.graphic == v.hammergraphic or v.graphic == v.froggraphic or v.graphic == v.tinygraphic or v.graphic == v.tanookigraphic or v.graphic == v.shellgraphic or v.graphic == v.boomeranggraphic then
 				if v.quadanim == "grow" then
 					offsets = customplayerhatoffsets(char, "hatoffsets", "grow") or hatoffsets["grow"]
 				elseif v.graphic == v.capegraphic and v.quadanim == "fly" then
@@ -3432,7 +3432,7 @@ function drawplayer(i, x, y, r, pad, drop)
 						--don't show hat in raccoon mode!
 						break
 					end
-					if v.graphic == v.biggraphic or v.graphic == v.capegraphic or v.graphic == v.shellgraphic or v.animationstate == "grow" or raccoonhat then
+					if v.graphic == v.biggraphic or v.graphic == v.firegraphic or v.graphic == v.icegraphic or v.graphic == v.superballgraphic or v.graphic == v.capegraphic or v.graphic == v.shellgraphic or v.animationstate == "grow" or raccoonhat then
 						if bighat[currenthat].sliding and bighat[currenthat].slidingemblem and v.animationstate == "sliding" and (not v.ducking) and not v.yoshi then --tilt hat when sliding
 							if raccoonhat then
 								love.graphics.draw(bighat[currenthat].raccoonsliding, bighat[currenthat].quad[1], math.floor(((px-xscroll)*16+offsetX)*scale), math.floor(((py-yscroll)*16-offsetY)*scale), pr, dirscale, horscale, v.quadcenterX - bighat[currenthat].x + offsets[1] + xadd, v.quadcenterY - bighat[currenthat].y + offsets[2] + yadd)

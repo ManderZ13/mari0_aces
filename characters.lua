@@ -20,7 +20,7 @@ function convertcolors(table)
 	for i, v in ipairs(table) do
 		if type(v) == "table" then
 			convertcolors(v)
-		else
+		elseif tonumber(v) ~= nil then
 			table[i] = tonumber(v)/255
 		end
 	end

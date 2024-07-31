@@ -55,6 +55,7 @@ local loadingbardraw = function(add)
 	if android then
 		love.graphics.scale(winwidth/(width*16*scale), winheight/(224*scale))
 	end
+	
 	love.graphics.setColor(150/255, 150/255, 150/255)
 	properprint("loading mari0..", ((width*16)*scale)/2-string.len("loading mari0..")*4*scale, 20*scale)
 	love.graphics.setColor(50/255, 50/255, 50/255)
@@ -64,6 +65,7 @@ local loadingbardraw = function(add)
 	else
 		scale2 = 1
 	end
+
 	properprint(loadingtext, ((width*16)*scale)/2-string.len(loadingtext)*4*scale, ((height*16)*scale)/2+165*scale2)
 	if FamilyFriendly then
 		love.graphics.setColor(1, 1, 1)
@@ -73,7 +75,7 @@ local loadingbardraw = function(add)
 		love.graphics.draw(logo, ((width*16)*scale)/2, ((height*16)*scale)/2, 0, scale2, scale2, 142, 150)
 	end
 
-	loadingbarv = loadingbarv + (add)/(8)
+	loadingbarv = loadingbarv + add/8
 	love.graphics.setColor(1,1,1)
 	love.graphics.rectangle("fill", 0, (height*16-3)*scale, (width*16*loadingbarv)*scale, 3*scale)
 	love.graphics.pop()
@@ -83,9 +85,8 @@ end
 function love.load()
 	loadingbarv = 0
 
-	marioversion = 1006
-	shaderlist = love.filesystem.getDirectoryItems( "shaders/" )
-	dlclist = {"dlc_a_portal_tribute", "dlc_acid_trip", "dlc_escape_the_lab", "dlc_scienceandstuff", "dlc_smb2J", "dlc_the_untitled_game"}
+	shaderlist = love.filesystem.getDirectoryItems("shaders")
+	maplist = {"smb", "portal", "alesans_entities_mappack"}
 	
 	magicdns_session_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	magicdns_session = ""
@@ -135,12 +136,9 @@ function love.load()
 		changescale(scale, fullscreen)
 	end
 
-	love.window.setTitle( "Mari0: ACES" )
-	
+	love.window.setTitle("Mari0: ACES")
 	love.window.setIcon(love.image.newImageData("graphics/icon.png"))
-	
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	
 	love.graphics.setBackgroundColor(0, 0, 0)
 	
 	logo = love.graphics.newImage("graphics/stabyourself.png") --deleted later to save memory
@@ -154,10 +152,6 @@ function love.load()
 	fontback = love.graphics.newFont("font.fnt", "graphics/SMB/fontback.png")
 	fontCAP = love.graphics.newFont("fontcap.fnt", "graphics/SMB/font.png")
 	fontbackCAP = love.graphics.newFont("fontcap.fnt", "graphics/SMB/fontback.png")
-	--gamefont = font
-	--gamefontback = fontback
-	--gamefontCAP = fontCAP
-	--gamefontbackCAp = fontbackCAP
 	love.graphics.setFont(font)
 
 	utf8 = require("utf8")
@@ -271,6 +265,7 @@ function love.load()
 	end
 	print("done loading .luas!")
 	loadingbardraw(1)
+	
 	local enemyluas = love.filesystem.getDirectoryItems("enemies")
 	for i = 1, #enemyluas do
 		require("enemies." .. enemyluas[i]:sub(1, enemyluas[i]:len()-4))
@@ -298,6 +293,7 @@ function love.load()
 	else
 		soundenabled = true
 	end
+	
 	love.filesystem.createDirectory("mappacks")
 	love.filesystem.createDirectory("onlinemappacks")
 	love.filesystem.createDirectory("characters")
@@ -361,6 +357,7 @@ function love.load()
 	--nitpicks
 	loadnitpicks()
 
+	--custom players
 	loadcustomplayers()
 	
 	editormode = false
@@ -385,20 +382,12 @@ function love.load()
 
 	loadingbardraw(1)
 	
-	--custom players
-	--loadplayer()
-	
 	--Backgroundcolors
 	backgroundcolor = {}
 	backgroundcolor[1] = {92/255, 148/255, 252/255}
 	backgroundcolor[2] = {0, 0, 0}
 	backgroundcolor[3] = {32/255, 56/255, 236/255}
 	backgroundcolor[4] = {0, 0, 0} --custom
-	--[[backgroundcolor[5] = {60/255, 188/255, 252/255}
-	backgroundcolor[6] = {168/255, 228/255, 252/255}
-	backgroundcolor[7] = {252/255, 216/255, 168/255}
-	backgroundcolor[8] = {252/255, 188/255, 176/255}
-	backgroundcolor[9] = {24/255, 60/255, 92/255}]]
 	
 	--IMAGES--
 	
@@ -971,14 +960,8 @@ function love.load()
 	shaders:set(1, shaderlist[currentshaderi1])
 	shaders:set(2, shaderlist[currentshaderi2])
 	
-	--[[for i, v in pairs(dlclist) do
-		delete_mappack(v)
-	end]]
-
-	for i = 1, #mariocharacter do
-		if mariocharacter[i] then
-			setcustomplayer(mariocharacter[i], i, "initial")
-		end
+	for i, v in ipairs(mariocharacter) do
+		setcustomplayer(v, i, "initial")
 	end
 
 	--mouse cursors
@@ -1058,7 +1041,6 @@ function love.update(dt)
 		return
 	end
 	
-	--netplay_update(dt)
 	if CLIENT then
 		client_update(dt)
 	elseif SERVER then
@@ -2429,12 +2411,12 @@ function keyprompt_update()
 	end
 end
 
-function print_r (t, indent) --Not by me
-	local indent=indent or ''
-	for key,value in pairs(t) do
-		io.write(indent,'[',tostring(key),']') 
-		if type(value)=="table" then io.write(':\n') print_r(value,indent..'\t')
-		else io.write(' = ',tostring(value),'\n') end
+function print_r(t, indent) --Not by me
+	local indent = indent or ''
+	for i, v in pairs(t) do
+		io.write(indent, '[', tostring(i), ']') 
+		if type(v) == "table" then io.write(':\n') print_r(v, indent .. '\t')
+		else io.write('=', tostring(v), '\n') end
 	end
 end
 
@@ -2447,7 +2429,7 @@ end
 
 function openSaveFolder(subfolder) --By Slime
 	local path = love.filesystem.getSaveDirectory()
-	path = subfolder and path.."/"..subfolder or path
+	path = subfolder and path .. "/" .. subfolder or path
 	
 	local cmdstr
 	local successval = 0
@@ -2474,31 +2456,6 @@ function openSaveFolder(subfolder) --By Slime
 	
 	-- returns true if successfully opened folder
 	return cmdstr and os.execute(cmdstr:format(path)) == successval
-end
-
-function getupdate()
-	local onlinedata, code = http.request("http://server.stabyourself.net/mari0/?mode=mappacks")
-	
-	if code ~= 200 then
-		return false
-	elseif not onlinedata then
-		return false
-	end
-	
-	local latestversion
-	
-	local split1 = onlinedata:split("<")
-	for i = 2, #split1 do
-		local split2 = split1[i]:split(">")
-		if split2[1] == "latestversion" then
-			latestversion = tonumber(split2[2])
-		end
-	end
-	
-	if latestversion and latestversion > marioversion then
-		return true
-	end
-	return false
 end
 
 --TTF Printing
@@ -2969,12 +2926,12 @@ function shallowcopy(orig)
 	local orig_type = type(orig)
 	local copy
 	if orig_type == 'table' then
-			copy = {}
-			for orig_key, orig_value in pairs(orig) do
-					copy[orig_key] = orig_value
-			end
+		copy = {}
+		for orig_key, orig_value in pairs(orig) do
+			copy[orig_key] = orig_value
+		end
 	else -- number, string, boolean, etc
-			copy = orig
+		copy = orig
 	end
 	return copy
 end
@@ -2983,13 +2940,13 @@ function deepcopy(orig)
 	local orig_type = type(orig)
 	local copy
 	if orig_type == 'table' then
-			copy = {}
-			for orig_key, orig_value in next, orig, nil do
-					copy[deepcopy(orig_key)] = deepcopy(orig_value)
-			end
-			setmetatable(copy, deepcopy(getmetatable(orig)))
+		copy = {}
+		for orig_key, orig_value in next, orig, nil do
+			copy[deepcopy(orig_key)] = deepcopy(orig_value)
+		end
+		setmetatable(copy, deepcopy(getmetatable(orig)))
 	else -- number, string, boolean, etc
-			copy = orig
+		copy = orig
 	end
 	return copy
 end
