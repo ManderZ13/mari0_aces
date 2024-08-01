@@ -1,7 +1,7 @@
 --[[
 	CREDITS
 	-----------------------------------------------------------------------------
-	ACES extension mod by KirbyKidJ
+	ACES mod by KirbyKidJ
 	Base mod by Alesan99
 	Mari0 by Maurice and StabYourself.net
 	
@@ -141,7 +141,7 @@ function love.load()
 	else
 		width = 25
 	end
-	height = 14 --?
+	height = 14
 	fsaa = 0
 	fullscreen = false
 	if scale == 2 and resizable then
@@ -2792,13 +2792,6 @@ function loadnitpicks()
 
 		ForceDropShadow = t.dropshadow or t.forcedropshadow
 		AutoAssistMode = t.assistmode
-		--also available in settings.txt
-		if t.fourbythree then
-			fourbythree = true
-			if fourbythree then	width = 16 else width = 25 end
-			if scale == 2 and resizable then changescale(5, fullscreen)
-			else changescale(scale, fullscreen) end
-		end
 		if t.windowwidth and t.windowheight then
 			width = t.windowwidth
 			height = t.windowheight
@@ -2814,7 +2807,7 @@ function loadnitpicks()
 			playertype = playertypelist[playertypei]
 		end
 		if t.mariomakergravity then
-			maxyspeed = smbmaxyspeed --SMB: 14
+			maxyspeed = smbmaxyspeed
 			mari0maxyspeed = maxyspeed
 		end
 		DontPauseOnUnfocus = t.dontpauseonunfocus

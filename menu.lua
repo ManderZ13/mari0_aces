@@ -1472,9 +1472,23 @@ function menu_draw()
 			else
 				properprintF(TEXT["off"], (posX-utf8.len(TEXT["off"])*8)*scale, 165*scale)
 			end
+
+			if optionsselection == 11 then
+				love.graphics.setColor(1, 1, 1, 1)
+			else
+				love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			end
 			
-			--love.graphics.setColor(100/255, 100/255, 100/255, 1)
-			--properprintF(TEXT["lock mouse with f12"], 30*scale, 195*scale)
+			properprintF(TEXT["fourbythree:"], 30*scale, 175*scale)
+			local posX = math.max(180, 30+utf8.len(TEXT["fourbythree:"])*8+40)
+			if fourbythree then
+				properprintF(TEXT["on"], (posX-utf8.len(TEXT["on"])*8)*scale, 175*scale)
+			else
+				properprintF(TEXT["off"], (posX-utf8.len(TEXT["off"])*8)*scale, 175*scale)
+			end
+
+			love.graphics.setColor(100/255, 100/255, 100/255, 1)
+			properprintF(TEXT["lock mouse with f12"], 30*scale, 195*scale)
 			
 			love.graphics.setColor(1, 1, 1, 1)
 			local version = "Version " .. VERSIONSTRING
@@ -1664,7 +1678,6 @@ function loadbackground(background)
 	animationnumbers = {}
 	
 	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. background) then
-	
 		map = {}
 		mapwidth = width
 		originalmapwidth = mapwidth
@@ -1687,7 +1700,7 @@ function loadbackground(background)
 		portalgun = true
 		portalguni = 1
 	else
-		local s = love.filesystem.read( "mappacks/" .. mappack .. "/" .. background )
+		local s = love.filesystem.read("mappacks/" .. mappack .. "/" .. background)
 		local s2 = s:split(";")
 		
 		--remove custom sprites
@@ -2276,7 +2289,6 @@ function menu_keypressed(key, unicode)
 			elseif mappacktype == "online" then
 				if onlinemappackselection > 1 then
 					onlinemappackselection = onlinemappackselection - 1
-					
 					onlineupdatescroll()
 				end
 			end
@@ -2284,13 +2296,11 @@ function menu_keypressed(key, unicode)
 			if mappacktype == "local" then
 				if mappackselection < #mappacklist then
 					mappackselection = mappackselection + 1
-					
 					updatescroll()
 				end
 			elseif mappacktype == "online" then
 				if onlinemappackselection < #onlineassetlist then
 					onlinemappackselection = onlinemappackselection + 1
-					
 					onlineupdatescroll()
 				end
 			end
@@ -2495,7 +2505,7 @@ function menu_keypressed(key, unicode)
 					optionsselection = 1
 				end
 			elseif optionstab == 3 then
-				if optionsselection < 10 then
+				if optionsselection < 11 then
 					optionsselection = optionsselection + 1
 				else
 					optionsselection = 1
@@ -2529,7 +2539,7 @@ function menu_keypressed(key, unicode)
 					end
 					optionsselection = limit
 				elseif optionstab == 3 then
-					optionsselection = 10
+					optionsselection = 11
 				elseif optionstab == 4 and gamefinished then
 					optionsselection = 11
 				end
@@ -2602,6 +2612,11 @@ function menu_keypressed(key, unicode)
 				elseif optionsselection == 10 then
 					vsync = not vsync
 					changescale(scale)
+				elseif optionsselection == 11 then
+					fourbythree = not fourbythree
+					if fourbythree then width = 16 else width = 25 end
+					if scale == 2 and resizable then changescale(5, fullscreen)
+					else changescale(scale, fullscreen) end
 				end
 			elseif optionstab == 4 then
 				if optionsselection == 2 then
@@ -2731,6 +2746,11 @@ function menu_keypressed(key, unicode)
 				elseif optionsselection == 10 then
 					vsync = not vsync
 					changescale(scale)
+				elseif optionsselection == 11 then
+					fourbythree = not fourbythree
+					if fourbythree then width = 16 else width = 25 end
+					if scale == 2 and resizable then changescale(5, fullscreen)
+					else changescale(scale, fullscreen) end
 				end
 			elseif optionstab == 4 then
 				if optionsselection == 2 then
