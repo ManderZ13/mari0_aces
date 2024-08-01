@@ -1,0 +1,5 @@
+base=koopa
+{	
+	"turnaroundoncliff": true,
+	"emancipatecheck": false
+}

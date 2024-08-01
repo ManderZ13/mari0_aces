@@ -1,0 +1,4 @@
+name=mario special
+author=hudson soft
+description=licensed sequel  to smb on home   computers
+lives=3

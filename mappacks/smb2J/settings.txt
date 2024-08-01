@@ -1,0 +1,5 @@
+name=the lost levels
+author=nintendo
+description=the japanese     version of smb2. by renhoex.edited
+lives=3
+physics=3

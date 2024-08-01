@@ -1,0 +1,40 @@
+{
+	"quadcount": 1,
+	"quadno": 1,
+	
+	"animationtype": "mirror",
+	"animationspeed": 0.2,
+	
+	"nospritesets": true,
+	
+	"kills": true,
+	
+	"movement": "truffleshuffle",
+	"truffleshufflespeed": 2,
+	"truffleshuffleacceleration": 8,
+	
+	"emancipatecheck": true,
+	"starttowardsplayerhorizontal": true,
+	"speedx": -2,
+	
+	"width": 0.75,
+	"height": 0.75,
+	"static": false,
+	"active": true,
+	"category": 5,
+	
+	"mask": [	true, 
+				false, false, false, false, true,
+				false, true, false, true, false,
+				false, false, true, false, false,
+				true, true, false, false, true,
+				false, true, true, false, false,
+				true, false, true, true, true],
+				
+	"autodelete": true,
+	
+	"offsetX": 6,
+	"offsetY": 3,
+	"quadcenterX": 8,
+	"quadcenterY": 8
+}

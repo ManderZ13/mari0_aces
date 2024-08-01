@@ -86,7 +86,21 @@ function love.load()
 	loadingbarv = 0
 
 	shaderlist = love.filesystem.getDirectoryItems("shaders")
-	maplist = {"smb", "portal", "alesans_entities_mappack"}
+	maplist = {
+		-- Recreations
+		"smb",
+		"smb2J",
+		"smb_special",
+		-- Mari0 1.6 + DLC
+		"portal",
+		"a_portal_tribute",
+		"acid_trip",
+		"escape_the_lab",
+		"scienceandstuff",
+		"the_untitled_game",
+		-- Mari0 AE
+		"alesans_entities_mappack"
+	}
 	
 	magicdns_session_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	magicdns_session = ""
@@ -299,20 +313,6 @@ function love.load()
 	love.filesystem.createDirectory("characters")
 	love.filesystem.createDirectory("hats")
 	
-	--[[copy included zip dlcs to save folder (because of course you can't mount from source directory :/)
-	local zips = love.filesystem.getDirectoryItems("dlc_mappacks")
-	if #zips > 0 then
-		for j, w in pairs(zips) do
-			if not love.filesystem.getInfo("onlinemappacks/" .. w) then
-				local filedata = love.filesystem.newFileData("dlc_mappacks/" .. w)
-				love.filesystem.write("onlinemappacks/" .. w, filedata)
-				if j == 1 and not love.filesystem.getInfo("onlinemappacks/" .. w) then
-					break
-				end
-			end
-		end
-	end]]
-
 	--mount dlc zip files
 	if onlinedlc then
 		mountalldlc()

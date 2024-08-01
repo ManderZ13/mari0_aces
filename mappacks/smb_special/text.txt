@@ -1,0 +1,14 @@
+endingtextcolor=255,255,255
+endingcolorname=white
+endingtext=congratulations!,you have finished this mappack!
+playername=mario
+hudtextcolor=255,255,255
+hudcolorname=white
+hudvisible=true
+hudworldletter=false
+hudoutline=true
+hudsimple=false
+toadtext=thank you mario!,but our princess is in,another castle!
+peachtext=thank you mario!,you cleared every world,you are the greatest player,,
+steve=false
+levelscreen=1|1|,4|4|levels ported by renhoek

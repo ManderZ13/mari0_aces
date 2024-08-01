@@ -1899,6 +1899,14 @@ function loadmappacks()
 	mappacktype = "local"
 	mappacklist = love.filesystem.getDirectoryItems("mappacks")
 
+	for i, v in ipairs(maplist) do
+		local pos = tablecontainsistring(mappacklist, v)
+		if pos then
+			table.remove(mappacklist, pos)
+			table.insert(mappacklist, i, v)
+		end
+	end
+
 	if onlinedlc then
 		mountalldlc()
 	end
@@ -2227,7 +2235,7 @@ function menu_keypressed(key, unicode)
 				if mappackbackground and mappackbackground[mappackselection] then
 					local bg = mappackbackground[mappackselection]:split("-")
 					local bgsub = bg[2]:split("_")[2] or 0
-					game_load(tonubmer(bg[1]), tonubmer(bg[2]), bgsub)
+					game_load(tonumber(bg[1]), tonumber(bg[2]), bgsub)
 				else
 					game_load()
 				end
@@ -3193,7 +3201,7 @@ function selectworld()
 				break
 			end
 			for j = 1, #mappacklevels do
-				if reachedworlds[mappack][i][j] then
+				if reachedworlds[mappack][i] and reachedworlds[mappack][i][j] then
 					levels = levels + 1
 					if levels > 1 then
 						noworlds = false
