@@ -7402,7 +7402,7 @@ function exportcustomimage(arg)
 		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/custom") then
 			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/custom")
 		end
-		love.filesystem.write("mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3], love.filesystem.read("graphics/" .. graphicspack .. "/" .. currentcustomimage[3]))
+		love.filesystem.write("mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3], love.filesystem.read("graphics/SMB/" .. currentcustomimage[3]))
 	elseif customtabstate == "tiles" then
 		if arg == "animated" then
 			if love.filesystem.getInfo("mappacks/" .. mappack .. "/animated/1.png") then
@@ -7414,9 +7414,9 @@ function exportcustomimage(arg)
 			end
 		else
 			if love.filesystem.getInfo("mappacks/" .. mappack .. "/tiles.png") then
-				love.filesystem.write("mappacks/" .. mappack .. "/tilestemplate.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/tilestemplate.png", love.filesystem.read("graphics/SMB/smbtiles.png"))
 			else
-				love.filesystem.write("mappacks/" .. mappack .. "/tiles.png", love.filesystem.read("graphics/" .. graphicspack .. "/smbtiles.png"))
+				love.filesystem.write("mappacks/" .. mappack .. "/tiles.png", love.filesystem.read("graphics/SMB/smbtiles.png"))
 			end
 		end
 	elseif customtabstate == "sounds" then
@@ -7549,7 +7549,7 @@ function savecustomimage()
 end
 function resetcustomimage()
 	love.filesystem.remove("mappacks/" .. mappack .. "/custom/" .. currentcustomimage[3])
-	_G[currentcustomimage[2]] = love.graphics.newImage("graphics/" .. graphicspack .. "/" .. currentcustomimage[3])
+	_G[currentcustomimage[2]] = love.graphics.newImage("graphics/SMB/" .. currentcustomimage[3])
 end
 function replacecustomimage(file)
 	local r, d = pcall(love.image.newImageData, file)

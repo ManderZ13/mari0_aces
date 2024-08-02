@@ -298,7 +298,6 @@ function love.load()
 	credited = true
 	http.TIMEOUT = 7
 	
-	graphicspack = "SMB" --SMB, ALLSTARS
 	playertypei = 1
 	playertype = playertypelist[playertypei] --portal, minecraft
 	
@@ -391,7 +390,7 @@ function love.load()
 	
 	--IMAGES--
 	
-	menuselectimg = love.graphics.newImage("graphics/" .. graphicspack .. "/menuselect.png")
+	menuselectimg = love.graphics.newImage("graphics/SMB/menuselect.png")
 	mappackback = love.graphics.newImage("graphics/GUI/mappackback.png")
 	mappacknoicon = love.graphics.newImage("graphics/GUI/mappacknoicon.png")
 	mappackonlineicon = love.graphics.newImage("graphics/GUI/mappackonlineicon.png")
@@ -413,9 +412,9 @@ function love.load()
 	markoverlayimg = love.graphics.newImage("graphics/markoverlay.png")
 	
 	--tiles
-	smbtilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/smbtiles.png")
-	portaltilesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaltiles.png")
-	entitiesimg = love.graphics.newImage("graphics/" .. graphicspack .. "/entities.png")
+	smbtilesimg = love.graphics.newImage("graphics/SMB/smbtiles.png")
+	portaltilesimg = love.graphics.newImage("graphics/SMB/portaltiles.png")
+	entitiesimg = love.graphics.newImage("graphics/SMB/entities.png")
 	tilequads = {}
 	
 	rgblist = {}
@@ -542,15 +541,15 @@ function love.load()
 	end]]
 	
 	--sledge bro shock
-	shockimg = love.graphics.newImage("graphics/" .. graphicspack .. "/shock.png")
+	shockimg = love.graphics.newImage("graphics/SMB/shock.png")
 	shockquad = {}
 	shockquad[1] = love.graphics.newQuad(0, 0, 4, 25, 8, 25)
 	shockquad[2] = love.graphics.newQuad(4, 0, 4, 25, 8, 25)
 
 	--if lights out mode isn't supported on device
-	mariolightimg = love.graphics.newImage("graphics/" .. graphicspack .. "/mariolight.png")
+	mariolightimg = love.graphics.newImage("graphics/SMB/mariolight.png")
 	
-	calendarimg = love.graphics.newImage("graphics/" .. graphicspack .. "/calendar.png")
+	calendarimg = love.graphics.newImage("graphics/SMB/calendar.png")
 	
 	--menut tips
 	menutips = {"resize the game window by changing the scale to 'resizable' in the options!",
@@ -733,13 +732,13 @@ function love.load()
 		icequad[i] = love.graphics.newQuad((((i-1)%3))*8, math.floor(i/3-.1)*8, 8, 8, 24, 24)
 	end
 	
-	bunnyearsimg = love.graphics.newImage("graphics/" .. graphicspack .. "/bunnyears.png")
+	bunnyearsimg = love.graphics.newImage("graphics/SMB/bunnyears.png")
 	bunnyearsquad = {}
 	for x = 1, 3 do
 		bunnyearsquad[x] = love.graphics.newQuad((x-1)*15, 0, 15, 7, 30, 7)
 	end
 	
-	capeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/cape.png")
+	capeimg = love.graphics.newImage("graphics/SMB/cape.png")
 	capequad = {}
 	for x = 1, 19 do
 		capequad[x] = love.graphics.newQuad((x-1)*16, 0, 16, 34, 304, 34)
@@ -786,19 +785,19 @@ function love.load()
 	
 	--Portal FX
 
-	portalgunimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalgun.png")
-	portalparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalparticle.png")
-	portalcrosshairimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalcrosshair.png")
-	portaldotimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portaldot.png")
-	portalprojectileimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectile.png")
-	portalprojectileparticleimg = love.graphics.newImage("graphics/" .. graphicspack .. "/portalprojectileparticle.png")
+	portalgunimg = love.graphics.newImage("graphics/SMB/portalgun.png")
+	portalparticleimg = love.graphics.newImage("graphics/SMB/portalparticle.png")
+	portalcrosshairimg = love.graphics.newImage("graphics/SMB/portalcrosshair.png")
+	portaldotimg = love.graphics.newImage("graphics/SMB/portaldot.png")
+	portalprojectileimg = love.graphics.newImage("graphics/SMB/portalprojectile.png")
+	portalprojectileparticleimg = love.graphics.newImage("graphics/SMB/portalprojectileparticle.png")
 	
 	--Menu shit
 	huebarimg = love.graphics.newImage("graphics/GUI/huebar.png")
 	huebarmarkerimg = love.graphics.newImage("graphics/GUI/huebarmarker.png")
 	volumesliderimg = love.graphics.newImage("graphics/GUI/volumeslider.png")
 	
-	laserfieldimg = love.graphics.newImage("graphics/" .. graphicspack .. "/laserfield.png")
+	laserfieldimg = love.graphics.newImage("graphics/SMB/laserfield.png")
 
 	gradientimg = love.graphics.newImage("graphics/gradient.png");gradientimg:setFilter("linear", "linear")
 
@@ -902,17 +901,10 @@ function love.load()
 	groundpoundsound = love.audio.newSource("sounds/groundpound.ogg", "static")
 	sausagesound = love.audio.newSource("sounds/totaka.ogg", "static")--this is for um, the sausage entity.
 	babysound = love.audio.newSource("sounds/baby.ogg", "static")
-	--i don't like this but i KNOW someone is going to complain about sounds if i don't do this
-	collectable1sound = love.audio.newSource("sounds/collectable1.ogg", "static")
-	collectable2sound = love.audio.newSource("sounds/collectable2.ogg", "static")
-	collectable3sound = love.audio.newSource("sounds/collectable3.ogg", "static")
-	collectable4sound = love.audio.newSource("sounds/collectable4.ogg", "static")
-	collectable5sound = love.audio.newSource("sounds/collectable5.ogg", "static")
-	collectable6sound = love.audio.newSource("sounds/collectable6.ogg", "static")
-	collectable7sound = love.audio.newSource("sounds/collectable7.ogg", "static")
-	collectable8sound = love.audio.newSource("sounds/collectable8.ogg", "static")
-	collectable9sound = love.audio.newSource("sounds/collectable9.ogg", "static")
-	collectable10sound = love.audio.newSource("sounds/collectable10.ogg", "static")
+	
+	for i = 1, 10 do
+		_G["collectable" .. i .. "sound"] = love.audio.newSource("sounds/collectable" .. i .. ".ogg", "static")
+	end
 	
 	glados1sound = love.audio.newSource("sounds/glados1.ogg", "stream")
 	glados2sound = love.audio.newSource("sounds/glados2.ogg", "static")
@@ -2886,8 +2878,8 @@ end
 function dothesausage(i)
 	if i then
 		if i == 1 and sausagesound then
-			titleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/title.png")
-			goombaimage = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/goomba.png")
+			titleimage = love.graphics.newImage("graphics/Nippon/title.png")
+			goombaimage = love.graphics.newImage("graphics/Nippon/goomba.png")
 			goombaimageframes = math.floor(goombaimage:getWidth()/16)
 			goombaquad = {}
 			for y = 1, 4 do
@@ -2896,13 +2888,12 @@ function dothesausage(i)
 					goombaquad[y][x] = love.graphics.newQuad((x-1)*16, (y-1)*16, 16, 16, goombaimage:getWidth(), 64)
 				end
 			end
-			plantimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/plant.png")
-			axeimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/axe.png")
-			castleflagimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/castleflag.png")
-			peachimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/peach.png")
-			toadimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/toad.png")
-			starimg = love.graphics.newImage("graphics/" .. graphicspack .. "/nippon/star.png")
-			love.graphics.setBackgroundColor(0, 0, 0)
+			plantimg = love.graphics.newImage("graphics/Nippon/plant.png")
+			axeimg = love.graphics.newImage("graphics/Nippon/axe.png")
+			castleflagimg = love.graphics.newImage("graphics/Nippon/castleflag.png")
+			peachimg = love.graphics.newImage("graphics/Nippon/peach.png")
+			toadimg = love.graphics.newImage("graphics/Nippon/toad.png")
+			starimg = love.graphics.newImage("graphics/Nippon/star.png")
 		end
 	else
 		if sausagesound then

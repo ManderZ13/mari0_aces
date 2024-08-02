@@ -63,7 +63,7 @@ function loadcustomsprites(initial) --Sprite loader
 	if (not customspritesexist) and customsprites then
 		for i = 1, #imgtable do
 			if initial or loadedcustomsprites[imgtable[i]] then
-				local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
+				local imgdata = love.image.newImageData("graphics/SMB/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
 				_G[imgtable[i]] = love.graphics.newImage(imgdata)
 				_G[imgdatatable[i]] = imgdata
 				loadedcustomsprites[imgtable[i]] = nil
@@ -133,7 +133,7 @@ function loadcustomsprites(initial) --Sprite loader
 			loadedcustomsprites[imgtable[i]] = true
 		else
 			if initial or loadedcustomsprites[imgtable[i]] then
-				local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
+				local imgdata = love.image.newImageData("graphics/SMB/" .. string.gsub(string.gsub(imgtable[i], "img", ""), "image", "") .. ".png")
 				_G[imgtable[i]] = love.graphics.newImage(imgdata)
 				_G[imgdatatable[i]] = imgdata
 				loadedcustomsprites[imgtable[i]] = nil
@@ -218,7 +218,7 @@ function loadcustomsprites(initial) --Sprite loader
 			titlequad[x] = love.graphics.newQuad((x-1)*titlewidth, 0, titlewidth, 88, titleimage:getWidth(), titleimage:getHeight())
 		end
 	else
-		titleimage = love.graphics.newImage("graphics/" .. graphicspack .. "/title.png")
+		titleimage = love.graphics.newImage("graphics/SMB/title.png")
 		titlewidth = titleimage:getWidth()
 		titleframes = math.floor(titleimage:getWidth()/titlewidth)
 		titleframe = 1
@@ -1718,10 +1718,10 @@ function fixsprites(reset)
 		SPRITESfixfont = true
 		local d3, d4
 		local d1 = love.image.newImageData("mappacks/" .. mappack .. "/custom/font.png")
-		local d2 = love.image.newImageData("graphics/" .. graphicspack .. "/font.png")
+		local d2 = love.image.newImageData("graphics/SMB/font.png")
 		if loadedcustomsprites["fontbackimage"] then
 			d3 = love.image.newImageData("mappacks/" .. mappack .. "/custom/fontback.png")
-			d4 = love.image.newImageData("graphics/" .. graphicspack .. "/fontback.png")
+			d4 = love.image.newImageData("graphics/SMB/fontback.png")
 		end
 		local oldglyphs = "0123456789abcdefghijklmnopqrstuvwxyz.:/,\"©-_>* !{}?+'()=><#%  "
 		--local locations = ""
@@ -1785,7 +1785,7 @@ function loadtiles(i, initial)
 		if i == "smbcustom" then
 			imgdata = love.image.newImageData("mappacks/" .. mappack .. "/custom/smbtiles.png")
 		else
-			imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/smbtiles.png")
+			imgdata = love.image.newImageData("graphics/SMB/smbtiles.png")
 		end
 
 		for y = 1, height do
@@ -1825,7 +1825,7 @@ function loadtiles(i, initial)
 		if i == "portalcustom" then
 			imgdata = love.image.newImageData("mappacks/" .. mappack .. "/custom/portaltiles.png")
 		else
-			imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/portaltiles.png")
+			imgdata = love.image.newImageData("graphics/SMB/portaltiles.png")
 		end
 		
 		for y = 1, height do
@@ -1841,7 +1841,7 @@ function loadtiles(i, initial)
 			local imgwidth, imgheight = entitiesimg:getWidth(), entitiesimg:getHeight()
 			local width = math.floor(imgwidth/17)
 			local height = math.floor(imgheight/17)
-			local imgdata = love.image.newImageData("graphics/" .. graphicspack .. "/entities.png")
+			local imgdata = love.image.newImageData("graphics/SMB/entities.png")
 			
 			for y = 1, height do
 				for x = 1, width do
