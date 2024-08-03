@@ -168,13 +168,11 @@ function guielement:update(dt)
 				if self.dir == "ver" then
 					local y = (love.mouse.getY()-self.draggingy) - self.y*scale
 					local actualyrange = self.yrange*scale
-					
-					self.value = math.min(math.max(y / actualyrange, 0), 1) --clamp
+					self.value = math.clamp(y / actualyrange, 0, 1)
 				else
 					local x = (love.mouse.getX()-self.draggingx) - self.x*scale
 					local actualxrange = self.xrange*scale
-					
-					self.value = math.min(math.max(x / actualxrange, 0), 1) --clamp
+					self.value = math.clamp(x / actualxrange, 0, 1)
 				end
 				if self.updatefunc then
 					self:updatefunc(self.value)

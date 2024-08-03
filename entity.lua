@@ -1126,7 +1126,7 @@ rightclicktype["enemytool"] = {
 			end
 			if rightclickvalues2[4] == "missing" then
 				--backwards compatibility, should it be a custom enemy?
-				if tablecontains(customenemies, v) then
+				if table.contains(customenemies, v) then
 					rightclickvalues2[4] = "true"
 				else
 					rightclickvalues2[4] = "false"

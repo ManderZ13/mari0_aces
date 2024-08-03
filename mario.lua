@@ -1813,7 +1813,7 @@ function mario:update(dt)
 			self:setquad("idle")
 		else
 			self:setsize(1)
-			if frame == 2 and self.size ~= -1 then
+			if frame == 2 and self.size ~= -1 and not self.yoshi then
 				self.animationstate = "grow"
 				if self.portalgun == true and not (playertype and playertype == "minecraft") then
 					self:setquad("grow", 1)
@@ -6917,7 +6917,7 @@ function hitblock(x, y, t, v)
 					map[x][y][2] = nil
 				end
 			end
-		elseif #r > 1 and tablecontains(customenemies, r[2]) then
+		elseif #r > 1 and table.contains(customenemies, r[2]) then
 			blockbouncet.content = r[2]
 			blockbouncet.content2 = size
 			playsound("mushroomappear")
@@ -8280,7 +8280,7 @@ function mario:button(b)
 				local sizepass = true
 				if gettable(f.size, i) then
 					if type(gettable(f.size, i)) == "table" then
-						if not tablecontains(gettable(f.size, i)) then
+						if not table.contains(gettable(f.size, i)) then
 							sizepass = false
 						end
 					elseif self.size ~= gettable(f.size, i) then
@@ -9118,7 +9118,7 @@ end
 
 function mario:getcolorfromcolorable(color, fallback)
 	if color ~= nil and #color > 0 then
-		local i = tablecontainsistring(self.characterdata.colorables, color)
+		local i = table.find(self.characterdata.colorables, color)
 		if i then return mariocolors[self.playernumber][i] end
 	end
 	return mariocolors[self.playernumber][fallback]

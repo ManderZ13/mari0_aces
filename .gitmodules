@@ -1,0 +1,3 @@
+[submodule "lua-libExpand"]
+	path = lua-libExpand
+	url = https://github.com/KirbyKid256/lua-libExpand

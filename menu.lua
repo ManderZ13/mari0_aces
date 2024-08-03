@@ -1913,7 +1913,7 @@ function loadmappacks()
 	mappacklist = love.filesystem.getDirectoryItems("mappacks")
 
 	for i, v in ipairs(maplist) do
-		local pos = tablecontainsistring(mappacklist, v)
+		local pos = table.find(mappacklist, v)
 		if pos then
 			table.remove(mappacklist, pos)
 			table.insert(mappacklist, i, v)
@@ -2614,7 +2614,13 @@ function menu_keypressed(key, unicode)
 					changescale(scale)
 				elseif optionsselection == 11 then
 					fourbythree = not fourbythree
-					if fourbythree then width = 16 else width = 25 end
+					if fourbythree then
+						width = 16
+						height = 15
+					else
+						width = 25
+						height = 14
+					end
 					if scale == 2 and resizable then changescale(5, fullscreen)
 					else changescale(scale, fullscreen) end
 				end
@@ -2748,7 +2754,13 @@ function menu_keypressed(key, unicode)
 					changescale(scale)
 				elseif optionsselection == 11 then
 					fourbythree = not fourbythree
-					if fourbythree then width = 16 else width = 25 end
+					if fourbythree then
+						width = 16
+						height = 15
+					else
+						width = 25
+						height = 14
+					end
 					if scale == 2 and resizable then changescale(5, fullscreen)
 					else changescale(scale, fullscreen) end
 				end
@@ -3048,27 +3060,27 @@ function keypromptenter(t, ...)
 	local axisonly = {"aimx", "aimy"}
 	if t ~= "key" or arg[1] ~= "escape" then
 		if t == "key" then
-			if tablecontains(axisonly, controlstable[optionsselection-3]) then
+			if table.contains(axisonly, controlstable[optionsselection-3]) then
 				axiserror = true
 			else
 				controls[skinningplayer][controlstable[optionsselection-3]] = {arg[1]}
 			end
 		elseif t == "joybutton" then
-			if tablecontains(axisonly, controlstable[optionsselection-3]) then
+			if table.contains(axisonly, controlstable[optionsselection-3]) then
 				axiserror = true
 			else
 				controls[skinningplayer][controlstable[optionsselection-3]] = {"joy", arg[1], "but", arg[2]}
 			end
 		elseif t == "joyhat" then
-			if tablecontains(buttononly, controlstable[optionsselection-3]) then
+			if table.contains(buttononly, controlstable[optionsselection-3]) then
 				buttonerror = true
-			elseif tablecontains(axisonly, controlstable[optionsselection-3]) then
+			elseif table.contains(axisonly, controlstable[optionsselection-3]) then
 				axiserror = true
 			else
 				controls[skinningplayer][controlstable[optionsselection-3]] = {"joy", arg[1], "hat", arg[2], arg[3]}
 			end
 		elseif t == "joyaxis" then
-			if tablecontains(buttononly, controlstable[optionsselection-3]) then
+			if table.contains(buttononly, controlstable[optionsselection-3]) then
 				buttonerror = true
 			else
 				controls[skinningplayer][controlstable[optionsselection-3]] = {"joy", arg[1], "axe", arg[2], arg[3]}

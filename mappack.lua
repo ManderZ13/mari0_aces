@@ -313,14 +313,14 @@ function loadcustombackground(filename)
 
 	-- loads BG from folders
 	if #custombackgroundimg == 0 and filename then
-		while tablecontainsi(realflnames, filename .. i) do
-			local path = tablecontainsi(realflnames, filename .. i)
+		while table.find(realflnames, filename .. i) do
+			local path = table.find(realflnames, filename .. i)
 			loadbg(i, realfl[path], string.sub(realfl[path], 1, -2))
 			i = i+1
 		end
 		if #custombackgroundimg == 0 then
-			if tablecontainsi(realflnames, filename) then
-				local path = tablecontainsi(realflnames, filename)
+			if table.find(realflnames, filename) then
+				local path = table.find(realflnames, filename)
 				loadbg(i, realfl[path])
 				return
 			end
@@ -416,14 +416,14 @@ function loadcustomforeground(filename)
 
 	-- loads BG from folders
 	if #customforegroundimg == 0 and filename then
-		while tablecontainsi(realflnames, filename .. i) do
-			local path = tablecontainsi(realflnames, filename .. i)
+		while table.find(realflnames, filename .. i) do
+			local path = table.find(realflnames, filename .. i)
 			loadbg(i, realfl[path], string.sub(realfl[path], 1, -2))
 			i = i+1
 		end
 		if #customforegroundimg == 0 then
-			if tablecontainsi(realflnames, filename) then
-				local path = tablecontainsi(realflnames, filename)
+			if table.find(realflnames, filename) then
+				local path = table.find(realflnames, filename)
 				loadbg(i, realfl[path])
 				return
 			end

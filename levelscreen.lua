@@ -170,10 +170,10 @@ function levelscreen_load(reason, i)
 					end
 				end
 			end
-		end
-		if not reachedworlds[mappack][marioworld][mariolevel] then
-			reachedworlds[mappack][marioworld][mariolevel] = true
-			updated = true
+			if not reachedworlds[mappack][marioworld][mariolevel] then
+				reachedworlds[mappack][marioworld][mariolevel] = true
+				updated = true
+			end
 		end
 	end
 	

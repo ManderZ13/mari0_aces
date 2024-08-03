@@ -8,7 +8,7 @@ function tilemoving:init(x, y, t)
 	self.item = false
 	if not t then
 		if map[x][y][2] and ((entitylist[map[x][y][2]] and entitylist[map[x][y][2]].block and (tilequads[self.t]["breakable"] or (not tilequads[self.t]["breakable"]) and tilequads[self.t]["coinblock"]))
-			or (tablecontains(customenemies, map[x][y][2]) and (tilequads[self.t]["breakable"] or tilequads[self.t]["coinblock"]))) then
+			or (table.contains(customenemies, map[x][y][2]) and (tilequads[self.t]["breakable"] or tilequads[self.t]["coinblock"]))) then
 			--item in block
 			self.item = map[x][y][2]
 			map[x][y][2] = nil
@@ -287,7 +287,7 @@ function tilemoving:hit(a, b, getbroken)
 		if self.item then
 			local t
 			local spawnitem = true
-			if tablecontains(customenemies, self.item) then
+			if table.contains(customenemies, self.item) then
 				--custom enemy
 				t = {"customenemy", self.item}
 			elseif entitylist[self.item] then

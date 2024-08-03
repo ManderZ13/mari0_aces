@@ -16,7 +16,7 @@ function enemytool:init(x, y, r, e)
 		self.yvel = v[3]
 		if v[4] == nil then
 			self.legacy = true
-			if tablecontains(customenemies, self.enemy) then
+			if table.contains(customenemies, self.enemy) then
 				self.customenemy = true
 			else
 				self.customenemy = false
@@ -235,7 +235,7 @@ function enemytool:spawn()
 
 	--actually spawn the enemy
 	local obj, wasenemy, objtable
-	if self.customenemy and tablecontains(customenemies, i) then
+	if self.customenemy and table.contains(customenemies, i) then
 		obj = enemy:new(x, y, i)
 		--turn in the right direction
 		if obj and self.animation == "piperight" and (not obj.dontmirror) then

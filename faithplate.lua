@@ -66,7 +66,7 @@ function faithplate:init(x, y, dir, vars, r)
 	}
 	local ignorelist = {"icicle", "cheep", "squid", "flyingfish", "cheepwhite", "cheepred", "chainchomp", "pinksquid", "parabeetle", "parabeetleright", "boo", "rockywrench"}
 	for i, v in pairs(enemies) do
-		if not tablecontains(ignorelist, v) then
+		if not table.contains(ignorelist, v) then
 			table.insert(self.includetable, v)
 		end
 	end

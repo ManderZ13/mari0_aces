@@ -1,20 +1,9 @@
 require "love.image"
 require "love.filesystem"
 require "love.graphics"
+require "lua-libExpand.string"
 local channelin = love.thread.getChannel("mappackin")
 local channelout = love.thread.getChannel("mappackout")
-
-function string:split(d)
-	local data = {}
-	local from, to = 1, string.find(self, d)
-	while to do
-		table.insert(data, string.sub(self, from, to-1))
-		from = to+d:len()
-		to = string.find(self, d, from)
-	end
-	table.insert(data, string.sub(self, from))
-	return data
-end
 
 function loadMappackInfo(url)
 	local t = {"","","","1-1"}

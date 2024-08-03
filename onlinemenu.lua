@@ -353,7 +353,7 @@ function magicdns_error(result)
 		print("MAGICDNS ERROR: "..result[2])
 		notice.new("MAGICDNS ERROR: "..result[2], notice.red, 3)
 		return true
-	elseif not tablecontains(magicdns_validresponses, result[1]) then
+	elseif not table.contains(magicdns_validresponses, result[1]) then
 		print("MAGICDNS: nonstandard response: "..result[1])
 		notice.new("MAGICDNS: nonstandard response: "..result[1], notice.red, 3)
 		return true

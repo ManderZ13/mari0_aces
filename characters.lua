@@ -69,6 +69,7 @@ function loadcustomplayers()
 
 				--hats
 				hats = false,
+				defaulthat = false,
 
 				--stats
 				walkacceleration = walkacceleration,
@@ -194,7 +195,7 @@ function loadcustomplayers()
 				growquadwidth = 20,
 				growquadheight = 24,
 				growquadcenterY = 16,
-				growquadcenterY2 = 10,
+				--growquadcenterY2 = 10,
 			
 				bigquadcenterY = 20,
 				bigquadcenterX = 9,

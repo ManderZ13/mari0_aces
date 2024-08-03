@@ -96,7 +96,7 @@ function mariotail:hitstuff(a, b)
 		end
 		b:hit("mariotail", self)
 	elseif a == "flipblock" then
-		if not tablecontains(self.hits, b) then
+		if not table.contains(self.hits, b) then
 			b:hit()
 			table.insert(self.hits, b)
 		end

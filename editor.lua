@@ -380,7 +380,7 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	guielements["editendingtext1"] = guielement:new("input", 10, 67, 32, nil, endingtext[1], 32)
 	guielements["editendingtext2"] = guielement:new("input", 10, 81, 32, nil, endingtext[2], 32)
 	guielements["editplayername"] = guielement:new("input", 10, 67, 12, nil, customname, 12)
-	guielements["endingcolor"] = guielement:new("dropdown", 10, 97, 7, changeendingtextcolor, tablecontainsi(textcolorsnames, textcolorl), unpack(textcolorsnames))
+	guielements["endingcolor"] = guielement:new("dropdown", 10, 97, 7, changeendingtextcolor, table.find(textcolorsnames, textcolorl), unpack(textcolorsnames))
 	guielements["endingcolor"].coloredtext = true
 	--guielements["endingcolor<"] = guielement:new("button", 10, 97, "{", endingtextcolorleft, 1)
 	--guielements["endingcolor>"] = guielement:new("button", guielements["endingcolor<"].x+guielements["endingcolor<"].width+utf8.len(TEXT["color"])*8+7, 97, "}", endingtextcolorright, 1)
@@ -393,7 +393,7 @@ function editor_load(player_position) --{x, y, xscroll, yscroll}
 	guielements["editpeachtext4"] = guielement:new("input", 10, 163, 32, nil, peachtext[4], 32)
 	guielements["editpeachtext5"] = guielement:new("input", 10, 177, 32, nil, peachtext[5], 32)
 	guielements["stevecheckbox"] = guielement:new("checkbox", 10, 191, togglesteve, pressbtosteve, "steve")
-	guielements["hudcolor"] = guielement:new("dropdown", 10, 83, 7, changehudtextcolor, tablecontainsi(textcolorsnames, textcolorp), unpack(textcolorsnames))
+	guielements["hudcolor"] = guielement:new("dropdown", 10, 83, 7, changehudtextcolor, table.find(textcolorsnames, textcolorp), unpack(textcolorsnames))
 	guielements["hudcolor"].coloredtext = true
 	--guielements["hudcolor<"] = guielement:new("button", 10, 83, "{", hudtextcolorleft, 1)
 	--guielements["hudcolor>"] = guielement:new("button", guielements["hudcolor<"].x+guielements["hudcolor<"].width+utf8.len(TEXT["color"])*8+7, 83, "}", hudtextcolorright, 1)
@@ -1291,16 +1291,16 @@ function editor_draw()
 								love.graphics.setColor(0, 1, 0, 150/255)
 							elseif (cox == x and coy == y and (not love.mouse.isDown("l"))) then
 								love.graphics.setColor(0, 1, 0, 1)
-								if tablecontains(r, "link")  then
+								if table.contains(r, "link")  then
 									drawline = true
 									printlabels = true
 								end
-							elseif tablecontains(r, "link") then
+							elseif table.contains(r, "link") then
 								love.graphics.setColor(150/255, 1, 150/255, 100/255)
 								drawline = true
-							elseif tablecontains(outputsi, map[x][y][2]) and cox == x and coy == y and linktoolX and love.mouse.isDown("l") then
+							elseif table.contains(outputsi, map[x][y][2]) and cox == x and coy == y and linktoolX and love.mouse.isDown("l") then
 								love.graphics.setColor(1, 1, 0, 1)
-							elseif tablecontains(outputsi, map[x][y][2]) then
+							elseif table.contains(outputsi, map[x][y][2]) then
 								love.graphics.setColor(1, 1, 150/255, 150/255)
 							elseif cox == x and coy == y and not love.mouse.isDown("l") then
 								love.graphics.setColor(1, 0, 0, 1)
@@ -1752,7 +1752,7 @@ function editor_draw()
 							for i, v in pairs(outputsi) do
 								if inmap(x, y) and #map[x][y] > 1 and map[x][y][2] == v then							
 									local r = map[x][y]
-									if tablecontains(outputsi, map[x][y][2]) then
+									if table.contains(outputsi, map[x][y][2]) then
 										love.graphics.setColor(1, 1, 150/255, 150/255)
 									else
 										love.graphics.setColor(1, 150/255, 150/255, 150/255)
@@ -2432,7 +2432,7 @@ function editor_draw()
 				local tilei, list = getentitylistpos(love.mouse.getX(), love.mouse.getY())
 				if tilei then
 					local tile = entitiesform[list][tilei]
-					local customenemydescription = (tile and (not tonumber(tile)) and tablecontains(customenemies, tile) and 
+					local customenemydescription = (tile and (not tonumber(tile)) and table.contains(customenemies, tile) and 
 						enemiesdata[tile] and enemiesdata[tile].description)
 					if tonumber(tile) or customenemydescription then
 						local newstring = entitydescriptions[tile]
@@ -4426,7 +4426,7 @@ function placetile(x, y, tilei)
 				--map[cox][coy]["argument"] = nil
 			elseif map[cox][coy][2] and entitylist[map[cox][coy][2]] and entitylist[map[cox][coy][2]][entitylist[currenttile].argumentname] then
 				map[cox][coy]["argument"] = entitylist[currenttile].argument
-			elseif entitylist[currenttile].t == "supersize" and map[cox][coy][2] and tablecontains(customenemies, map[cox][coy][2]) and
+			elseif entitylist[currenttile].t == "supersize" and map[cox][coy][2] and table.contains(customenemies, map[cox][coy][2]) and
 				enemiesdata[map[cox][coy][2]] and enemiesdata[map[cox][coy][2]].supersize then
 				map[cox][coy]["argument"] = entitylist[currenttile].argument
 			end
@@ -4441,7 +4441,7 @@ function placetile(x, y, tilei)
 				for i = 4, #map[cox][coy] do
 					map[cox][coy][i] = nil
 				end
-			elseif tablecontains(customenemies, currenttile) and enemiesdata[currenttile] and (enemiesdata[currenttile].rightclickmenu or enemiesdata[currenttile].rightclick) then --custom enemies
+			elseif table.contains(customenemies, currenttile) and enemiesdata[currenttile] and (enemiesdata[currenttile].rightclickmenu or enemiesdata[currenttile].rightclick) then --custom enemies
 				local v = enemiesdata[currenttile]
 				if v.rightclickmenu then
 					if v.rightclickmenutable then
@@ -5044,7 +5044,7 @@ function editor_mousepressed(x, y, button)
 				if #r > 1 then
 					local tile = r[2]
 					--LIST OF NUMBERS THAT ARE ACCEPT AS OUTPUT (doors, lights)
-					if tablecontains( inputsi, r[2] ) then
+					if table.contains( inputsi, r[2] ) then
 						--linktoolX, linktoolY = tileX, tileY
 						--syke, just open up the right click menu
 						openrightclickmenu(x, y, tileX, tileY)
@@ -5512,7 +5512,7 @@ function openrightclickmenu(x, y, tileX, tileY)
 		if rightclickmenu.x+rightclickmenu.width*8 > width*16 then
 			rightclickmenu.x = (width*16)-rightclickmenu.width*8
 		end
-	elseif tablecontains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclickmenu then
+	elseif table.contains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclickmenu then
 		local v = enemiesdata[r[2]]
 		rightclickmenuX = x
 		rightclickmenuY = y
@@ -5571,7 +5571,7 @@ function openrightclickmenu(x, y, tileX, tileY)
 		if v.rightclickmenutable then
 			rightclickmenu.trustWhatStartWasSetAs = true
 		end
-	elseif tablecontains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclick then
+	elseif table.contains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclick then
 		local v = enemiesdata[r[2]]
 		rightclickmenuX = x
 		rightclickmenuY = y
@@ -5632,7 +5632,7 @@ function openrightclickmenu(x, y, tileX, tileY)
 				local ents = v.rightclick[i][4]
 				if tostring(var) then
 					local target = tostring(var):gsub("B", "-")
-					var = tablecontainsistring(ents, target)
+					var = table.find(ents, target)
 					vt[index] = var
 				end
 			
@@ -5969,7 +5969,7 @@ end
 function rightclickmenuclick(i)
 	if i > 1 then
 		local r = map[rightclickmenucox][rightclickmenucoy]
-		if tablecontains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclickmenu then
+		if table.contains(customenemies, r[2]) and enemiesdata[r[2]] and enemiesdata[r[2]].rightclickmenu then
 			--custom enemy
 			--print(i, enemiesdata[r[2]].rightclickmenu[i])
 			if enemiesdata[r[2]].rightclickmenutable then
@@ -6330,10 +6330,10 @@ function setrclink(endx, endy)
 	--LIST OF NUMBERS THAT ARE ACCEPTED AS INPUTS (buttons, laserdetectors)
 	local customoutput = false
 	if rightclicktype[entityquads[map[rightclickmenucox][rightclickmenucoy][2]].t].customoutputs and entityquads[r[2]] then
-		customoutput = tablecontains(
+		customoutput = table.contains(
 		rightclicktype[entityquads[map[rightclickmenucox][rightclickmenucoy][2]].t].customoutputs, entityquads[r[2]].t )
 	end
-	if #r > 1 and (tablecontains( outputsi, r[2] ) or customoutput) then
+	if #r > 1 and (table.contains( outputsi, r[2] ) or customoutput) then
 		r = map[x][y]
 		
 		local i = 1
@@ -6351,7 +6351,7 @@ function setrclink(endx, endy)
 		if editorstate == "selectiontool" and #selectiontoolselection > 0 then
 			for i, t in pairs(selectiontoolselection) do
 				local x, y = t[1], t[2]
-				if tablecontains(inputsi, map[x][y][2]) then
+				if table.contains(inputsi, map[x][y][2]) then
 					local r = map[x][y]
 					local i = 1
 					while (r[i] ~= "link" or (linktooli and tostring(linktooli) ~= tostring(r[i+3]))) and i <= #r do
@@ -6392,7 +6392,7 @@ function resetrclink(id) --id
 	if editorstate == "selectiontool" and #selectiontoolselection > 0 then
 		for i, t in pairs(selectiontoolselection) do
 			local x, y = t[1], t[2]
-			if tablecontains(inputsi, map[x][y][2]) then
+			if table.contains(inputsi, map[x][y][2]) then
 				local i = 1
 				while (r[i] ~= "link" or (id and tostring(id) ~= tostring(r[i+3]))) and i <= #r do
 					i = i + 1
@@ -6473,7 +6473,7 @@ function editor_mousereleased(x, y, button)
 					for x = 1, mapwidth do
 						for y = 1, mapheight do
 							local d = map[x][y]
-							if tablecontains(inputsi, d[2]) then
+							if table.contains(inputsi, d[2]) then
 								for i = 3, #d do
 									if d[i] == "link" then
 										if inrange(d[i+1], tileselection[1], tileselection[3], true) and inrange(d[i+2], tileselection[2], tileselection[4], true) then

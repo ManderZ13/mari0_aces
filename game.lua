@@ -4437,8 +4437,8 @@ function startlevel(level, reason)
 		for y = starty-15, starty+15 do
 			for x = startx-8, startx+8 do
 				if inmap(x, y) and #map[x][y] > 1 then
-					if tablecontains(checkpointignoreenemies, entityquads[map[x][y][2]].t) 
-						or (tablecontains(customenemies, entityquads[map[x][y][2]].t)
+					if table.contains(checkpointignoreenemies, entityquads[map[x][y][2]].t) 
+						or (table.contains(customenemies, entityquads[map[x][y][2]].t)
 						and enemiesdata[map[x][y][2]] and
 						enemiesdata[map[x][y][2]].dontspawnnearcheckpoint) then
 						table.insert(enemiesspawned, {x, y})
@@ -4707,7 +4707,7 @@ function loadmap(filename)
 				else
 					map[x][y][i] = r[i]
 					--check if custom enemy doesn't exist
-					if editormode and i == 2 and not tablecontains(customenemies, r[i]) then
+					if editormode and i == 2 and not table.contains(customenemies, r[i]) then
 						print("custom enemy " .. r[i] .. " does not exist")
 						map[x][y][i] = 1
 					end
@@ -6662,7 +6662,7 @@ function loadentity(t, x, y, r, id)
 		angrysunendx = x
 		
 	elseif t == "checkpoint" then
-		if not tablecontains(checkpoints, x) then
+		if not table.contains(checkpoints, x) then
 			table.insert(checkpoints, x)
 			checkpointpoints[x] = y
 			if r and #r > 2 then
@@ -6670,18 +6670,18 @@ function loadentity(t, x, y, r, id)
 			end
 		end
 	elseif t == "checkpointflag" then
-		if not tablecontains(checkpoints, x) then
+		if not table.contains(checkpoints, x) then
 			table.insert(checkpoints, x)
 			checkpointpoints[x] = y
 			objects["checkpointflag"][x] = checkpointflag:new(x, y, r, #checkpoints)
 		end
 	elseif t == "mazestart" then
-		if not tablecontains(mazestarts, x) then
+		if not table.contains(mazestarts, x) then
 			table.insert(mazestarts, x)
 		end
 		mazesfuck = true
 	elseif t == "mazeend" then
-		if not tablecontains(mazeends, x) then
+		if not table.contains(mazeends, x) then
 			table.insert(mazeends, x)
 		end
 		mazesfuck = true
@@ -6741,7 +6741,7 @@ function loadentity(t, x, y, r, id)
 		end
 	elseif t == "firestart" then
 		firestartx = x
-	elseif r[2] and tablecontains(customenemies, r[2]) then
+	elseif r[2] and table.contains(customenemies, r[2]) then
 		if enemiesdata[r[2]].spawnonload then
 			local type, name = t[1], t[2]
 			if (not tilequads[r[1]]["breakable"]) and (not tilequads[r[1]]["coinblock"]) then
@@ -7125,7 +7125,7 @@ function spawnenemyentity(x, y)
 	if #r > 1 then
 		--get the name of the entity
 		local t
-		if tablecontains(customenemies, r[2]) then
+		if table.contains(customenemies, r[2]) then
 			--custom enemy
 			t = {"customenemy", r[2]}
 		elseif entitylist[r[2]] then
@@ -8667,12 +8667,10 @@ end
 
 function setcamerasetting(i)
 	if i == 2 then --centered
-		scrollingstart = (width/2)+.5
-		scrollingcomplete = (width/2)-1.5
-		scrollingleftstart = (width/2)+1
-		scrollingleftcomplete = (width/2)-2
-	elseif i == 3 then
-
+		scrollingstart = (width/2)
+		scrollingcomplete = (width/2)
+		scrollingleftstart = (width/2)-1
+		scrollingleftcomplete = (width/2)-1
 	end
 end
 
@@ -9154,7 +9152,7 @@ function drawmaptiles(drawtype, xscroll, yscroll)
 				
 				if #t > 1 and t[2] ~= "link" then
 					tilenumber = t[2]
-					if tablecontains(customenemies, tilenumber) and enemiesdata[tilenumber] and (enemiesdata[tilenumber].width and enemiesdata[tilenumber].height) then --ENEMY PREVIEW THING
+					if table.contains(customenemies, tilenumber) and enemiesdata[tilenumber] and (enemiesdata[tilenumber].width and enemiesdata[tilenumber].height) then --ENEMY PREVIEW THING
 						local v = enemiesdata[tilenumber]
 						local exoff, eyoff = ((0.5-v.width/2+(v.spawnoffsetx or 0))*16 + v.offsetX - v.quadcenterX)*scale, (((v.spawnoffsety or 0)-v.height+1)*16-v.offsetY - v.quadcenterY)*scale
 						

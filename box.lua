@@ -485,6 +485,10 @@ function box:addoutput(a, t)
 end
 
 function box:used(id)
+	if self.parent then 
+		self.parent:dropbox()
+	end
+
 	self.parent = objects["player"][id]
 	self.active = false
 	self.speedx = 0

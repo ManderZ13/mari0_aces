@@ -100,7 +100,7 @@ function androidLoad()
 	if fourbythree then
 		local skip = {"left", "right", "up", "down", "reload", "portal1", "portal2"}
 		for i, v in pairs(buttons) do
-			if not tablecontains(skip, i) then 
+			if not table.contains(skip, i) then 
 				v.x = v.x - 144
 			end
 		end

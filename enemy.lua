@@ -1402,7 +1402,7 @@ function enemy:update(dt)
 		if self.homingatenemy then
 			local dist
 			for i, v in pairs(objects["enemy"]) do
-				if (type(self.homingatenemy) == "string" and v.t == self.homingatenemy) or (type(self.homingatenemy) == "table" and tablecontains(self.homingatenemy, v.t)) then
+				if (type(self.homingatenemy) == "string" and v.t == self.homingatenemy) or (type(self.homingatenemy) == "table" and table.contains(self.homingatenemy, v.t)) then
 					local relativex, relativey = (v.x + -self.x), (v.y + -self.y)
 					local distance = math.sqrt(relativex*relativex+relativey*relativey)
 					if ((not dist) or (distance < dist)) then
@@ -2083,7 +2083,7 @@ function enemy:update(dt)
 	if self.transforms and (self:gettransformtrigger("enemynear") or self:gettransformtrigger("enemynotnear")) then
 		local check = false
 		for i, v in pairs(objects["enemy"]) do
-			if (type(self.enemynearcheck) == "table" and tablecontains(self.enemynearcheck, v.t)) or self.enemynearcheck == v.t then
+			if (type(self.enemynearcheck) == "table" and table.contains(self.enemynearcheck, v.t)) or self.enemynearcheck == v.t then
 				if type(self.enemyneardist) == "number" then
 					check = inrange(v.x+v.width/2, self.x+self.width/2-(self.enemyneardist or 3), self.x+self.width/2+(self.enemyneardist or 3))
 				elseif type(self.enemyneardist) == "table" and #self.enemyneardist == 4 then
@@ -2985,7 +2985,7 @@ function enemy:leftcollide(a, b, c, d)
 		end
 		return false
 	elseif (not self.frozen) and self.small then
-		if (a ~= "enemy" and not tablecontains(enemies, a)) or (b.resistsenemykill or b.resistseverything) then
+		if (a ~= "enemy" and not table.contains(enemies, a)) or (b.resistsenemykill or b.resistseverything) then
 			self.speedx = self.smallspeed
 			
 			if not self.kickedupsidedown then
@@ -3089,7 +3089,7 @@ function enemy:rightcollide(a, b, c, d)
 		end
 		return false
 	elseif (not self.frozen) and self.small then
-		if (a ~= "enemy" and not tablecontains(enemies, a)) or (b.resistsenemykill or b.resistseverything) then
+		if (a ~= "enemy" and not table.contains(enemies, a)) or (b.resistsenemykill or b.resistseverything) then
 			self.speedx = -self.smallspeed
 			
 			if not self.kickedupsidedown then
@@ -3748,7 +3748,7 @@ function enemy:gettransformtrigger(n) --AE ADDITION
 	if not self.transformtrigger then
 		return false
 	elseif type(self.transformtrigger) == "table" then
-		return tablecontainsi(self.transformtrigger, n)
+		return table.find(self.transformtrigger, n)
 	else
 		return (self.transformtrigger == n)
 	end
@@ -3758,7 +3758,7 @@ function enemy:gettransformsinto(n) --AE ADDITION
 	if not self.transformsinto then
 		return false
 	elseif type(self.transformsinto) == "table" and type(self.transformtrigger) == "table" then
-		local i = tablecontainsi(self.transformtrigger, n)
+		local i = table.find(self.transformtrigger, n)
 		return self.transformsinto[i]
 	else
 		return self.transformsinto
@@ -3831,6 +3831,10 @@ function enemy:used(id)
 			temp:used(id)
 		end
 		return false
+	end
+
+	if self.carryparent then 
+		self.carryparent.dropbox()
 	end
 
 	self.carryparent = objects["player"][id]

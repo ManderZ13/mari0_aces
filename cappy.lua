@@ -386,7 +386,7 @@ function cappy:globalcollide(a, b)
 		self:back()
 	end
 	--capture
-	if tablecontains(enemies, a) then
+	if table.contains(enemies, a) then
 		self:capture(b, a)
 	elseif mariohammerkill[a] then
 		self:capture(b, a)
