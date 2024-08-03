@@ -33,6 +33,7 @@
 --version check
 if love._version_major < 11 then error("You have an outdated version of Love2d! Get 11.5 and retry.") end
 
+require("lua-libExpand.init")
 require("utils")
 hardloadhttps()
 
