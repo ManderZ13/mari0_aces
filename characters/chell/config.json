@@ -2,7 +2,7 @@
 	"colors": [
 		[216,40,0],
 		[0,0,0],
-		[252,152,56],
+		[252,151,58],
 		[255,255,255]
 		],
 	"colorables": [
@@ -32,11 +32,12 @@
 		[252,152,56],
 		[255,255,255]]
 		],
-	"flowercolor": [[252,216,168], [216,40,0], "skin"],
-	"hammersuitcolor": [[0,0,0], [255,255,255], "skin"],
-	"frogsuitcolor": [[0,168,0], [0,0,0], "skin"],
-	"iceflowercolor": [[225,255,255], [60, 188, 252], "skin"],
-	"tanookisuitcolor": [[200,76,12], [0,0,0], "skin"],
+	"flowercolor": [[252,216,168], [216,40,0], "skin", "top"],
+	"hammersuitcolor": [[0,0,0], [255,255,255], "skin", "top"],
+	"frogsuitcolor": [[0,168,0], [0,0,0], "skin", "top"],
+	"iceflowercolor": [[168,228,252], [60,188,252], "skin", "top"],
+	"tanookisuitcolor": [[200,76,12], [0,0,0], "skin", "top"],
+	"superballcolor": [[160,160,100], [100,100,50], [230,230,180], [100,100,50]],
 
 	"smallducking": false,
 

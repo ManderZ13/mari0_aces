@@ -1813,7 +1813,7 @@ function mario:update(dt)
 			self:setquad("idle")
 		else
 			self:setsize(1)
-			if frame == 2 and self.size ~= -1 and not self.yoshi then
+			if frame == 2 and self.size ~= -1 and (not self.yoshi or not self.yoshi) then
 				self.animationstate = "grow"
 				if self.portalgun == true and not (playertype and playertype == "minecraft") then
 					self:setquad("grow", 1)

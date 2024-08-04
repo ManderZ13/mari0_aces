@@ -54,7 +54,7 @@ local loadingbardraw = function(add)
 	love.graphics.clear()
 	love.graphics.push()
 	if android then
-		love.graphics.scale(winwidth/(width*16*scale), winheight/(224*scale))
+		love.graphics.scale(winwidth/(width*16*scale), winheight/(height*16*scale))
 	end
 	
 	love.graphics.setColor(150/255, 150/255, 150/255)
@@ -1092,14 +1092,14 @@ function love.draw()
 				love.graphics.draw(canvas, winwidth/2, winheight/2, 0, s, s, cw/2, ch/2)
 			else
 				love.graphics.setColor(1, 1, 1)
-				love.graphics.draw(canvas, 0, 0, 0, winwidth/(width*16*scale), winheight/(224*scale))
+				love.graphics.draw(canvas, 0, 0, 0, winwidth/(width*16*scale), winheight/(height*16*scale))
 			end
 
 			if android and not androidLowRes then
 				androidDraw()
 			end
 		else
-			love.graphics.scale(winwidth/(width*16*scale), winheight/(224*scale))
+			love.graphics.scale(winwidth/(width*16*scale), winheight/(height*16*scale))
 			lovedraw()
 		end
 	else
@@ -1694,7 +1694,7 @@ function changescale(s, fullscreen)
 		resizable = true
 		
 		uispace = math.floor(width*16*scale/4)
-		love.window.setMode(width*16*scale, 224*scale, {fullscreen=fullscreen, vsync=vsync, msaa=fsaa, resizable=window_resizable, minwidth=width*16, minheight=224}) --27x14 blocks (15 blocks actual height)
+		love.window.setMode(width*16*scale, height*16*scale, {fullscreen=fullscreen, vsync=vsync, msaa=fsaa, resizable=window_resizable, minwidth=width*16, minheight=height*16}) --27x14 blocks (15 blocks actual height)
 		
 		gamewidth, gameheight = love.graphics.getDimensions()
 		if android then
@@ -1704,7 +1704,7 @@ function changescale(s, fullscreen)
 		end
 		winwidth, winheight = getWindowSize()
 		
-		canvassupported = true--love.graphics.isSupported("canvas")
+		canvassupported = true
 		if canvassupported then
 			canvas = love.graphics.newCanvas(width*16*scale, height*16*scale)
 			canvas:setFilter("nearest", "nearest")
@@ -1739,16 +1739,11 @@ end
 function love.resize(w, h)
 	winwidth, winheight = w, h
 	if resizable and canvassupported then
-		if winwidth < (width*16*scale)*1.5 or winheight < (224*scale)*1.5 then
+		if winwidth < (width*16*scale)*1.5 or winheight < (height*16*scale)*1.5 then
 			canvas:setFilter("linear", "linear")
 		else
 			canvas:setFilter("nearest", "nearest")
 		end
-		--[[if winwidth/(width*16*scale) and winheight/(224*scale) == math.floor(winheight/(224*scale)) then
-			canvas:setFilter("nearest", "nearest")
-		else
-			canvas:setFilter("linear", "linear")
-		end]]
 	end
 	if shaders then
 		shaders:refresh()
@@ -2285,44 +2280,6 @@ function newRecoloredImage(path, tablein, tableout)
 	return love.graphics.newImage(imagedata)
 end
 
-function string:split(d)
-	local data = {}
-	local from, to = 1, string.find(self, d)
-	while to do
-		table.insert(data, string.sub(self, from, to-1))
-		from = to+d:len()
-		to = string.find(self, d, from)
-	end
-	table.insert(data, string.sub(self, from))
-	return data
-end
-
-function tablecontains(t, entry)
-	for i, v in pairs(t) do
-		if v == entry then
-			return true
-		end
-	end
-	return false
-end
-
-function tablecontainsi(t, entry)
-	for i, v in pairs(t) do
-		if v == entry then
-			return i
-		end
-	end
-	return false
-end
-
-function tablecontainsistring(t, entry)
-	for i, v in pairs(t) do
-		if tostring(v) == entry then
-			return i
-		end
-	end
-	return false
-end
 
 function getaveragecolor(imgdata, cox, coy)
 	local minalpha = 127/255

@@ -9,7 +9,7 @@ function intro_load()
 	introprogress = 0.5
 	
 	screenwidth = width*16*scale
-	screenheight = 224*scale
+	screenheight = height*16*scale
 	allowskip = false
 end
 

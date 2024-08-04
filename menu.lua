@@ -430,22 +430,6 @@ function menu_draw()
 	love.graphics.setColor(1, 1, 1)
 	drawmaptiles("menu", 0, 0, xtodraw, ytodraw)
 	
-	--[[for y = 1, ytodraw do
-		for x = 1, xtodraw do
-			local t = map[x][y]
-			if t then --cheap fix
-				local tilenumber = tonumber(t[1])
-				if tilequads[tilenumber].coinblock and tilenumber < 90000 and tilequads[tilenumber].invisible == false then --coinblock
-					love.graphics.draw(coinblockimage, coinblockquads[spriteset][coinframe], math.floor((x-1)*16*scale), ((y-1)*16-8)*scale, 0, scale, scale)
-				elseif (tilequads[tilenumber].coin and tilenumber < 90000) or (t[2] == "187") then --coin
-					love.graphics.draw(coinimage, coinquads[spriteset][coinframe], math.floor((x-1)*16*scale), ((y-1)*16-8)*scale, 0, scale, scale)
-				elseif tilenumber ~= 0 and not tilequads[tilenumber].invisible then
-					love.graphics.draw(tilequads[tilenumber].image, tilequads[tilenumber].quad, math.floor((x-1)*16*scale), ((y-1)*16-8)*scale, 0, scale, scale)
-				end
-			end
-		end
-	end]]
-	
 	for j = 1, math.min(4, players) do
 		local char = mariocharacter[j]
 		local v = characters.data[char]
@@ -666,7 +650,6 @@ function menu_draw()
 			love.graphics.setColor(1, 1, 1, 200/255)
 			properprintF(utf8.sub(currentmenutip, 1, math.floor((menutipoffset+(width*16))/8)+1), -menutipoffset*scale, 210*scale)
 		end
-		
 	elseif gamestate == "mappackmenu" then
 		--background
 		love.graphics.setColor(0, 0, 0, 100/255)
@@ -768,7 +751,7 @@ function menu_draw()
 			
 				love.graphics.draw(mappackscrollbar, 227*scale, (20+i*160)*scale, 0, scale, scale)
 			
-				if mappackhorscrollsmooth <= 0.01 then
+				if not fourbythree and mappackhorscrollsmooth <= 0.01 then
 					love.graphics.setScissor()
 					love.graphics.setColor(0, 0, 0, 200/255)
 					love.graphics.rectangle("fill", 241*scale, 125*scale, 150*scale, 65*scale)
@@ -799,7 +782,7 @@ function menu_draw()
 				end
 				
 				love.graphics.setScissor()
-				if mappackhorscrollsmooth <= 1.01 then
+				if not fourbythree and mappackhorscrollsmooth <= 1.01 then
 					love.graphics.setColor(0, 0, 0, 200/255)
 					love.graphics.rectangle("fill", 241*scale, 16*scale, 150*scale, 180*scale)
 					love.graphics.setColor(1, 1, 1, 1)
@@ -1041,7 +1024,7 @@ function menu_draw()
 		
 		if downloadingmappack then
 			love.graphics.setColor(0, 0, 0, 100/255)
-			love.graphics.rectangle("fill", 0, 0, width*16*scale, 224*scale)
+			love.graphics.rectangle("fill", 0, 0, width*16*scale, height*16*scale)
 			love.graphics.setColor(0, 0, 0, 230/255)
 			love.graphics.rectangle("fill", ((width*16)/2-100)*scale, (224/2-15)*scale, 200*scale, 30*scale)
 			love.graphics.setColor(1, 1, 1)
@@ -1895,14 +1878,18 @@ function mappacks()
 	mappacksearchbar.active = false
 	if mappackhorscroll == 0 then
 		loadmappacks()
-		openmappacksbutton.active = true
-		mappacksearchbar.active = true
+		if not fourbythree then
+			openmappacksbutton.active = true
+			mappacksearchbar.active = true
+		end
 	elseif mappackhorscroll == 1 then
 		if (not onlineassetlist) or onlinemappacklisterror then
 			loadonlinemappacks()
 		end
 		mappacktype = "online"
-		opendlcbutton.active = true
+		if not fourbythree then
+			opendlcbutton.active = true
+		end
 	elseif mappackhorscroll == 2 then
 		loaddailychallenge()
 	end
@@ -2054,7 +2041,7 @@ function loadonlinemappacks()
 		downloadingmappack = true
 		love.graphics.clear(love.graphics.getBackgroundColor())
 		if resizable then
-			love.graphics.scale(winwidth/(width*16*scale), winheight/(224*scale))
+			love.graphics.scale(winwidth/(width*16*scale), winheight/(height*16*scale))
 		end
 		menu_draw()
 		love.graphics.present()
@@ -2238,6 +2225,9 @@ function menu_keypressed(key, unicode)
 				if nofunallowed then
 					notice.new("Creator disabled the editor.", notice.white, 2)
 					return false
+				elseif fourbythree then
+					notice.new("Turn off FourByThree first.", notice.white, 2)
+					return false
 				end
 				editormode = true
 				players = 1
@@ -2264,6 +2254,10 @@ function menu_keypressed(key, unicode)
 			if players > 1 then
 				players = players - 1
 			elseif players == 1 then
+				if fourbythree then
+					notice.new("Turn off FourByThree first.", notice.white, 2)
+					return
+				end
 				onlinemenu_load()
 			end
 		elseif (key == "right" or key == "d") then
@@ -2313,7 +2307,7 @@ function menu_keypressed(key, unicode)
 				downloadingmappack = true
 				love.graphics.clear(love.graphics.getBackgroundColor())
 				if resizable then
-					love.graphics.scale(winwidth/(width*16*scale), winheight/(224*scale))
+					love.graphics.scale(winwidth/(width*16*scale), winheight/(height*16*scale))
 				end
 				menu_draw()
 				love.graphics.present()
@@ -2614,13 +2608,7 @@ function menu_keypressed(key, unicode)
 					changescale(scale)
 				elseif optionsselection == 11 then
 					fourbythree = not fourbythree
-					if fourbythree then
-						width = 16
-						height = 15
-					else
-						width = 25
-						height = 14
-					end
+					if fourbythree then width = 16 else width = 25 end
 					if scale == 2 and resizable then changescale(5, fullscreen)
 					else changescale(scale, fullscreen) end
 				end
@@ -2754,13 +2742,7 @@ function menu_keypressed(key, unicode)
 					changescale(scale)
 				elseif optionsselection == 11 then
 					fourbythree = not fourbythree
-					if fourbythree then
-						width = 16
-						height = 15
-					else
-						width = 25
-						height = 14
-					end
+					if fourbythree then width = 16 else width = 25 end
 					if scale == 2 and resizable then changescale(5, fullscreen)
 					else changescale(scale, fullscreen) end
 				end

@@ -60,7 +60,7 @@ end
 function languagemenu_draw()
 	--Darken Background
 	love.graphics.setColor(0, 0, 0, 100/255)
-	love.graphics.rectangle("fill", 0, 0, width*16*scale, 224*scale)
+	love.graphics.rectangle("fill", 0, 0, width*16*scale, height*16*scale)
 	--Window
 	local w, h = 220, (LanguageCount+1)*10+10
 	local x, y = (width*16-w)/2, (height*16-h)/2
