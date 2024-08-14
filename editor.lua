@@ -545,7 +545,7 @@ function editor_update(dt)
 		if love.keyboard.isDown("rshift") then
 			speed = 70
 		end
-		if (love.keyboard.isDown("left") or (android and leftkey(1) and not autoscroll)) and (rightclickmenuopen or (not brushsizetoggle)) then
+		if (love.keyboard.isDown("left") or (android and leftkey(1) and not autoscroll)) and ((rightclickmenuopen or (not brushsizetoggle)) and not typingintextinput) then
 			autoscroll = false
 			guielements["autoscrollcheckbox"].var = autoscroll
 			splitxscroll[1] = splitxscroll[1] - speed*gdt
@@ -553,7 +553,7 @@ function editor_update(dt)
 				splitxscroll[1] = 0
 			end
 			generatespritebatch()
-		elseif (love.keyboard.isDown("right") or (android and rightkey(1) and not autoscroll)) and (rightclickmenuopen or (not brushsizetoggle)) then
+		elseif (love.keyboard.isDown("right") or (android and rightkey(1) and not autoscroll)) and ((rightclickmenuopen or (not brushsizetoggle)) and not typingintextinput) then
 			autoscroll = false
 			guielements["autoscrollcheckbox"].var = autoscroll
 			splitxscroll[1] = splitxscroll[1] + speed*gdt
@@ -562,7 +562,7 @@ function editor_update(dt)
 			end
 			generatespritebatch()
 		end
-		if mapheight ~= 15 and (rightclickmenuopen or (not brushsizetoggle)) then
+		if mapheight ~= 15 and ((rightclickmenuopen or (not brushsizetoggle)) and not typingintextinput) then
 			if (love.keyboard.isDown("up") or (android and upkey(1) and not autoscroll)) then
 				autoscroll = false
 				guielements["autoscrollcheckbox"].var = autoscroll
@@ -5284,7 +5284,7 @@ function editor_mousepressed(x, y, button)
 		end
 		
 	elseif button == "wu" then
-		if editormenuopen then
+		if editormenuopen or rightclickmenuopen then
 		else
 			if EditorZoom and ctrlpressed then
 				local dy = 1
@@ -5327,7 +5327,7 @@ function editor_mousepressed(x, y, button)
 			end
 		end
 	elseif button == "wd" then
-		if editormenuopen then
+		if editormenuopen or rightclickmenuopen then
 		else
 			if EditorZoom and ctrlpressed then
 				local dy = -1
@@ -5938,6 +5938,7 @@ function openrightclickmenu(x, y, tileX, tileY)
 		--Move if out of screen
 		local scootx = ((x/scale)+rightclickobjects.width > width*16)
 		local scooty = ((y/scale)+rightclickobjects.height > height*16)
+		local shiftx = ((x/scale)-rightclickobjects.width < 0)
 		local shifty = ((y/scale)-rightclickobjects.height < 0)
 	
 		local truey = rightclickobjects[1].y
@@ -5946,7 +5947,12 @@ function openrightclickmenu(x, y, tileX, tileY)
 			for i = 1, #rightclickobjects do
 				local obj = rightclickobjects[i]
 				if scootx then
-					rightclickobjects[i].x = rightclickobjects[i].x - rightclickobjects.width
+					if shiftx then
+						--neither work, just shift
+						rightclickobjects[i].x = ((width*16)-(x/scale))-rightclickobjects.width+rightclickobjects[i].x
+					else
+						rightclickobjects[i].x = rightclickobjects[i].x - rightclickobjects.width
+					end
 				end
 				if scooty then
 					if shifty then
@@ -7450,45 +7456,44 @@ function exportcustomimage(arg)
 end
 function opencustomimagefolder(f)
 	if android then
-		notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android >\nalesans_entities > mappacks", notice.red, 15)
-		return false
+		notice.new("On android try a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android", notice.red, 5)
 	end
 	if customtabstate == "graphics" then
 		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/custom", "directory") then
 			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/custom")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/custom")
+		openfile("mappacks/" .. mappack .. "/custom")
 	elseif customtabstate == "tiles" then
 		if f == "tiles" then
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack)
+			openfile("mappacks/" .. mappack)
 		elseif f == "animated" then
 			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/animated", "directory") then
 				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/animated")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/animated")
+			openfile("mappacks/" .. mappack .. "/animated")
 		end
 	elseif customtabstate == "backgrounds" then
 		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/backgrounds", "directory") then
 			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/backgrounds")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/backgrounds")
+		openfile("mappacks/" .. mappack .. "/backgrounds")
 	elseif customtabstate == "sounds" then
 		if f == "sounds" then
 			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/sounds", "directory") then
 				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/sounds")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/sounds")
+			openfile("mappacks/" .. mappack .. "/sounds")
 		else
 			if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/music", "directory") then
 				love.filesystem.createDirectory( "mappacks/" .. mappack .. "/music")
 			end
-			love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/music")
+			openfile("mappacks/" .. mappack .. "/music")
 		end
 	elseif customtabstate == "enemies" then
 		if not love.filesystem.getInfo( "mappacks/" .. mappack .. "/enemies", "directory") then
 			love.filesystem.createDirectory( "mappacks/" .. mappack .. "/enemies")
 		end
-		love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. "mappacks/" .. mappack .. "/enemies")
+		openfile("mappacks/" .. mappack .. "/enemies")
 	end
 end
 function savecustomimage()

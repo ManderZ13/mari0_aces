@@ -1,6 +1,7 @@
 guielement = class:new()
 
 local android_key_repeat = false --bugfix: keep track of last pressed key to prevent glitchy keyboards from inputing letter twice
+typingintextinput = false --dirty fix, not neccessarily accurate but good enough to prevent unintended scrolling in editor
 
 function guielement:init(...)
 	local arg = {...}
@@ -214,6 +215,7 @@ function guielement:update(dt)
 					self.numdragging = true
 					self.numdraggingstart = false
 					self.inputting = false
+					typingintextinput = false
 				end
 				--self.oldmousex, self.oldmousey = love.mouse.getPosition()
 			end
@@ -614,7 +616,11 @@ function guielement:draw(a, offx, offy)
 			end
 			local s = tostring(self.value)
 			love.graphics.setColor(self.textcolor)
-			properprint(string.sub(s,self.textoffset+1, self.textoffset+self.width), (self.x+1+self.spacing)*scale, (self.y+2+self.spacing)*scale)
+			if self.allowanycharacters then
+				properprintfast(string.sub(s,self.textoffset+1, self.textoffset+self.width), (self.x+1+self.spacing)*scale, (self.y+2+self.spacing)*scale)
+			else
+				properprint(string.sub(s,self.textoffset+1, self.textoffset+self.width), (self.x+1+self.spacing)*scale, (self.y+2+self.spacing)*scale)
+			end
 		else
 			--format string for tall text boxes
 			local oldstring = self.value--string.sub(self.value, self.textoffset+1, self.textoffset+self.width)  --old offsets
@@ -733,6 +739,7 @@ function guielement:click(x, y, button)
 					if self:inhighlight(x, y) then
 						if button == "r" and (self.rightclickvalue or (self.displayfunction and self.min and self.max)) and not android then
 							self.inputting = true
+							typingintextinput = true
 							self.textvalue = self:displayfunction(self.value)
 							self.cursorblink = true
 							self.timer = 0
@@ -742,6 +749,7 @@ function guielement:click(x, y, button)
 						end
 					else
 						self.inputting = false
+						typingintextinput = false
 					end
 				end
 			end
@@ -767,6 +775,7 @@ function guielement:click(x, y, button)
 						self.cursorpos = string.len(self.value)+1
 					end
 					self.inputting = true
+					typingintextinput = true
 					self.timer = 0
 					self.cursorblink = true
 					if self.width >= self.maxlength or self.height > 1 then
@@ -794,6 +803,7 @@ function guielement:click(x, y, button)
 						self:uninputtingfunc()
 					end
 					self.inputting = false
+					typingintextinput = false
 					self.highlight = false
 				end
 			end
@@ -808,6 +818,7 @@ function guielement:keypress(key,textinput)
 			if self.inputting and not self.highlighting then
 				if key == "escape" then
 					self.inputting = false
+					typingintextinput = false
 					love.keyboard.setKeyRepeat(false)
 				elseif (key == "return" or key == "enter" or key == "kpenter") then
 					local newvalue = tonumber(self.textvalue)
@@ -822,6 +833,7 @@ function guielement:keypress(key,textinput)
 						end
 					end
 					self.inputting = false
+					typingintextinput = false
 					love.keyboard.setKeyRepeat(false)
 				elseif key == "backspace" then
 					self.textvalue = string.sub(self.textvalue, 1, -2)
@@ -847,7 +859,7 @@ function guielement:keypress(key,textinput)
 					android_key_repeat = key
 				end]]
 
-				if key == ":" or key == ";" then
+				if (key == ":" or key == ";") and not self.allowanycharacters then
 					return
 				elseif key == "," and (not self.bypassspecialcharacters) then
 					key = "A"
@@ -856,6 +868,7 @@ function guielement:keypress(key,textinput)
 				end
 				if key == "escape" and not android then
 					self.inputting = false
+					typingintextinput = false
 					self.highlight = false
 					love.keyboard.setKeyRepeat(false)
 				elseif (key == "return" or key == "enter" or key == "kpenter") or (android and key == "escape") then
@@ -863,6 +876,7 @@ function guielement:keypress(key,textinput)
 						if self.extra == "music" then
 							changemusic(musici)
 							self.inputting = false
+							typingintextinput = false
 							love.keyboard.setKeyRepeat(false)
 							if android then
 								love.keyboard.setTextInput(false)--[DROID]
@@ -870,6 +884,7 @@ function guielement:keypress(key,textinput)
 						elseif self.extra == "rightclick" then
 							self.func(self.value)
 							self.inputting = false
+							typingintextinput = false
 							love.keyboard.setKeyRepeat(false)
 							if android then
 								love.keyboard.setTextInput(false)--[DROID]
@@ -879,6 +894,7 @@ function guielement:keypress(key,textinput)
 						end
 					else
 						self.inputting = false
+						typingintextinput = false
 						love.keyboard.setKeyRepeat(false)
 						if android then
 							love.keyboard.setTextInput(false)--[DROID]
@@ -939,6 +955,7 @@ function guielement:keypress(key,textinput)
 					if self.highlight then
 						local highlight = {math.min(self.highlight,self.cursorpos),math.max(self.highlight,self.cursorpos)}
 						if key == "x" and self.ctrl then
+							-- cut text selection
 							textclipboard = string.sub(self.value,highlight[1],highlight[2]-1)
 						end
 						self.value = string.sub(self.value,1,highlight[1]-1)..string.sub(self.value,highlight[2])
@@ -961,8 +978,11 @@ function guielement:keypress(key,textinput)
 					self.highlight = 1
 					self.cursorpos = string.len(self.value) + 1
 				elseif key == "c" and self.ctrl then
-					local highlight1, highlight2 = math.min(self.highlight,self.cursorpos),math.max(self.highlight,self.cursorpos)
-					textclipboard = string.sub(self.value,highlight1,highlight2-1)
+					--copy text selection
+					if self.highlight then
+						local highlight1, highlight2 = math.min(self.highlight,self.cursorpos),math.max(self.highlight,self.cursorpos)
+						textclipboard = string.sub(self.value,highlight1,highlight2-1)
+					end
 				else
 					if android then
 						if not (textinput and textinput == "forcetextinput") then
@@ -1021,6 +1041,8 @@ function guielement:keypress(key,textinput)
 								targetkey = "+"
 							elseif key == "B" and not self.bypassspecialcharacters then
 								targetkey = "_"
+							elseif key == ";" then
+								targetkey = ":"
 							end
 						end
 						

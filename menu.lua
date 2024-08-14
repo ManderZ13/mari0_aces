@@ -2806,13 +2806,12 @@ function menu_keypressed(key, unicode)
 				if optionsselection == 3 then
 					--open characters folder
 					if android then
-						notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android >\nalesans_entities > characters", notice.red, 15)
-						return false
+						notice.new("On android try a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_android", notice.red, 5)
 					end
 					if not love.filesystem.getInfo("characters") then
 						love.filesystem.createDirectory("characters")
 					end
-					love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/characters")
+					openfile("characters")
 				end
 			end
 		elseif key == "escape" then
@@ -3258,13 +3257,14 @@ function opendlcfolder()
 	end
 
 	if android then
-		notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario >\nfiles > save > mari0_aces > " .. path, notice.red, 15)
+		notice.new("On android use a file manager\nand go to:\nAndroid > data > Love.to.mario", notice.white, 5)
+		filebrowser_load(path)
 		return false
 	end
 	if not love.filesystem.getInfo(path) then
 		love.filesystem.createDirectory(path)
 	end
-	love.system.openURL("file://" .. love.filesystem.getSaveDirectory() .. "/" .. path)
+	openfile(path)
 end
 
 --https://stackoverflow.com/questions/20459943/find-the-last-index-of-a-character-in-a-string/20461414
